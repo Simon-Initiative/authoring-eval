@@ -1,0 +1,8 @@
+{
+  "vars": [
+	{ "variable": "V1", "expression": "\"23,25,26\"" },
+	{ "variable": "V2", "expression": "em.random(1, 3)" },
+	{ "variable": "V3", "expression": "em.getAV(@V1@, @V2@)" },
+	{ "variable": "V4", "expression": "em.emJs(x = @V3@+1; return x;)" }
+  ]
+}
