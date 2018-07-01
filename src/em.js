@@ -43,9 +43,12 @@ const em = {
   PI: () => Math.PI(),
   exp: (x) => Math.exp(x),
   pow: (x, y) => Math.pow(x, y),
-  mod: (a, b) => Math.mod(a, b),
   toRadians: (d) => d * (Math.PI / 180),
   sizeStrs: (arr) => arr.split(',').length,
+
+  mod: (a, b) => {
+    return a % b;
+  },
 
   getAV: (arr, index) => {
     if (arr.startsWith('\"')) {
