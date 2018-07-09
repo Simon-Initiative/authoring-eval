@@ -43,7 +43,7 @@ function replaceVars(expression, evaluated) {
 
 /* interface Evaluated {
  *   variable: string;
- *   evaluted: any;
+ *   evaluated: any;
  *   errored: boolean;
  * }
  */
