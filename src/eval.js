@@ -41,9 +41,9 @@ function replaceVars(expression, evaluated) {
  * }
  */
 
-/* interface Evaluated {
+/* interface Evaluation {
  *   variable: string;
- *   evaluated: any;
+ *   result: string;
  *   errored: boolean;
  * }
  */
@@ -52,7 +52,7 @@ function replaceVars(expression, evaluated) {
  * Evaluate a list of expressions. It does not allow forward references, so expressions
  * must only refer to variables previously defined.
  * @param {Variable[]} variables
- * @return {Evaluated[]}
+ * @return {Evaluation[]}
  */
 function evaluate(variables) {
 
