@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.3",
+    "express-cluster": "0.0.5",
     "vm2": "^3.6.0"
   }
 }

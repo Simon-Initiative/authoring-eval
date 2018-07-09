@@ -2,18 +2,25 @@ const { VM } = require('vm2');
 const { em } = require('./em');
 
 const vm = new VM({
-  timeout: 1000,
+  timeout: 300,
   sandbox: { em }
 });
 
 function run(expression) {
-  return vm.run(expression, 'vm.js');
+  try {
+    return vm.run(expression, 'vm.js');
+  } catch (e) {
+    return null;
+  }
 }
 
 function replaceVars(expression, evaluated) {
   
   Object.keys(evaluated).forEach(key => {
     const value = evaluated[key];
+    
+    // Handle double @ and single @
+    expression = expression.replace(new RegExp('@@' + key + '@@', 'g'), value);
     expression = expression.replace(new RegExp('@' + key + '@', 'g'), value);
   });
 
@@ -45,15 +52,20 @@ function evaluate(variables) {
       const varsReplaced = replaceVars(v.expression, evaluated);
 
       const evaled = run(varsReplaced);
-
-      evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
+      
+      if (evaled !== null) {
+        evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
         ? '\"' + evaled + '\"'
         : evaled;
+      } else {
+        evaluated[v.variable] = null;
+      }      
 
       return evaluated;
     }, {});
 
-  return Object.keys(evaluated).map(k => ({ variable: k, result: evaluated[k] }));
+  return Object.keys(evaluated).map(k => 
+    ({ variable: k, result: evaluated[k], errored: evaluated[k] === null }));
 } 
 
 module.exports = {
