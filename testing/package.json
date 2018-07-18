@@ -1,0 +1,14 @@
+{
+  "name": "loadtester",
+  "version": "1.0.0",
+  "description": "Tests the Expression Evaluator",
+  "main": "loadTester.js",
+  "scripts": {
+    "test": "node loadTester.js"
+  },
+  "author": "Ben Orgera",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.87.0"
+  }
+}
