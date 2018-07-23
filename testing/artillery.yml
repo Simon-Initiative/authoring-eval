@@ -1,0 +1,19 @@
+config:
+  # http://shattrath.oli.cmu.edu:8000  for shattrath test
+  # http://dev.local:8000 for local test
+  # http://shattrath.oli.cmu.edu:8000 for production test
+  target: "http://shattrath.oli.cmu.edu:8000"
+  phases:
+    # currently 5 seconds of 100 tests per second
+    - duration: 5
+      arrivalRate: 100
+  processor: "./logger.js"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+scenarios:
+  - flow:
+    - post:
+        url: "/sandbox"
+        body: "{\r\n  \"vars\": [\r\n    {\r\n      \"variable\": \"V1\",\r\n      \"expression\": \"em.random(1,4)\"\r\n    },\r\n    {\r\n      \"variable\": \"V2\",\r\n      \"expression\": \"em.random(3,9)\"\r\n    },\r\n    {\r\n      \"variable\": \"V3\",\r\n      \"expression\": \"em.random(10,15)\"\r\n    },\r\n    {\r\n      \"variable\": \"V4\",\r\n      \"expression\": \"em.random(20,29)\"\r\n    },\r\n    {\r\n      \"variable\": \"V5\",\r\n      \"expression\": \"em.random(18,23)\"\r\n    },\r\n    {\r\n      \"variable\": \"V6\",\r\n      \"expression\": \"em.random(14,18)\"\r\n    },\r\n    {\r\n      \"variable\": \"V7\",\r\n      \"expression\": \"em.random(6,9)\"\r\n    },\r\n    {\r\n      \"variable\": \"V8\",\r\n      \"expression\": \"em.random(3,6)\"\r\n    },\r\n    {\r\n      \"variable\": \"V9\",\r\n      \"expression\": \"em.random(1,3)\"\r\n    },\r\n    {\r\n      \"variable\": \"V10\",\r\n      \"expression\": \"@@V1@@+@@V2@@+@@V3@@+@@V4@@+@@V5@@+@@V6@@+@@V7@@+@@V8@@+@@V9@@\"\r\n    },\r\n    {\r\n      \"variable\": \"V11\",\r\n      \"expression\": \"@@V1@@+2*@@V2@@+3*@@V3@@+4*@@V4@@+5*@@V5@@+6*@@V6@@+7*@@V7@@+8*@@V8@@+9*@@V9@@\"\r\n    },\r\n    {\r\n      \"variable\": \"V12\",\r\n      \"expression\": \"em.round(@@V11@@\\\/@@V10@@)\"\r\n    },\r\n    {\r\n      \"variable\": \"V13\",\r\n      \"expression\": \"em.emJs(a=[[\\\"1\\\",@@V1@@],[\\\"2\\\",@@V2@@], [\\\"3\\\",@@V3@@],[\\\"4\\\",@@V4@@],[\\\"5\\\",@@V5@@],[\\\"6\\\",@@V6@@],[\\\"7\\\",@@V7@@],[\\\"8\\\",@@V8@@],[\\\"9\\\",@@V9@@]];\\nb = a.reduce((p, c) => { for (i=0;i<Number(c[1]);i++) p +=(c[0] + ','); return p; }, \\\"\\\"); b = b.substr(0, b.length -1); return '\\\"' + b +\\n '\\\"';return b;)\"\r\n    },\r\n    {\r\n      \"variable\": \"V14\",\r\n      \"expression\": \"@@V10@@\\\/2\"\r\n    },\r\n    {\r\n      \"variable\": \"V15\",\r\n      \"expression\": \"em.round(@@V14@@,0)\"\r\n    },\r\n    {\r\n      \"variable\": \"V16\",\r\n      \"expression\": \"em.getAV(@@V13@@,@@V15@@)\"\r\n    }\r\n  ]\r\n}"
+        afterResponse: "log"

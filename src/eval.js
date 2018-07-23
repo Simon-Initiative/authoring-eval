@@ -14,14 +14,22 @@ function run(expression) {
   }
 }
 
+/**
+ * Replaces all variable references in an expression with their correspending value 
+ * already determined in the `evaluate` function
+ * @param {string} expression A Javascript expression, optionally with variables 
+ * delimited by @ or @@
+ * @param {Object<string, string>} evaluated A map of variable names and their values
+ * @return {string} The expression with variable references replaced by their values
+ */
 function replaceVars(expression, evaluated) {
-  
-  Object.keys(evaluated).forEach(key => {
-    const value = evaluated[key];
-    
+
+  Object.keys(evaluated).forEach(variable => {
+    const value = evaluated[variable];
+
     // Handle double @ and single @
-    expression = expression.replace(new RegExp('@@' + key + '@@', 'g'), value);
-    expression = expression.replace(new RegExp('@' + key + '@', 'g'), value);
+    expression = expression.replace(new RegExp('@@' + variable + '@@', 'g'), value);
+    expression = expression.replace(new RegExp('@' + variable + '@', 'g'), value);
   });
 
   return expression;
@@ -96,7 +104,25 @@ function orderByDependencies(variables) {
  return order;
 }
 
+/* interface Variable {
+ *   variable: string;
+ *   expression: string;
+ * }
+ */
 
+/* interface Evaluation {
+ *   variable: string;
+ *   result: string;
+ *   errored: boolean;
+ * }
+ */
+
+/**
+ * Evaluate a list of expressions. It does not allow forward references, so expressions
+ * must only refer to variables previously defined.
+ * @param {Variable[]} variables
+ * @return {Evaluation[]}
+ */
 function evaluate(variables) {
 
   const ordered = orderByDependencies(variables);
@@ -106,16 +132,17 @@ function evaluate(variables) {
       ({ variable: k.variable, result: 'cycle detected', errored: true }));
   }
 
-  // replace all calls to em.emJs with a function to invoke
+  // Replace all calls to em.emJs with a function to invoke
+  // emJsReplaced: Variable[]
   const emJsReplaced = ordered
     .map(v => {
       if (v.expression.startsWith('em.emJs(')) {
         // 'em.emJs(x=x+1; return x;)'
         // '()=>{
-        
+
         let body = v.expression.substr(8);
         body = body.substr(0, body.length - 1);
-        
+
         return {
           variable: v.variable,
           expression: '(function(){' + body + '})()',
@@ -124,26 +151,28 @@ function evaluate(variables) {
       return v;
     });
 
+  // evaluated: Object<string, string> where the keys are variable names and values are
+  // the evaluted variable expressions
   const evaluated = emJsReplaced
     .reduce((evaluated, v) => {
       const varsReplaced = replaceVars(v.expression, evaluated);
 
       const evaled = run(varsReplaced);
-      
+
       if (evaled !== null) {
         evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
-        ? '\"' + evaled + '\"'
-        : evaled;
+          ? '\"' + evaled + '\"'
+          : evaled;
       } else {
         evaluated[v.variable] = null;
-      }      
+      }
 
       return evaluated;
     }, {});
 
-  return Object.keys(evaluated).map(k => 
+  return Object.keys(evaluated).map(k =>
     ({ variable: k, result: evaluated[k], errored: evaluated[k] === null }));
-} 
+}
 
 module.exports = {
   evaluate,

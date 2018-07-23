@@ -18,7 +18,7 @@ docker build -t sandbox .
 Then run it:
 
 ```
-docker run -d -p 8000:8000 sandbox
+docker run --restart=always -d -p 8000:8000 sandbox
 ```
 
 

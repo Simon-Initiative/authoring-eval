@@ -1,8 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const cluster = require("express-cluster");
-const url = require("url");
-const util = require("util");
 
 const { evaluate } = require('./eval');
 
