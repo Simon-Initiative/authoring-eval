@@ -6,7 +6,7 @@ const round = (num, decimalPositions) => {
 const random = (lower, upper, decimalPositions = 0) => {
   return lower === undefined
     ? Math.random()
-    : round((Math.random() * (upper - lower)) + lower, decimalPositions);
+    : round((Math.random() * ((upper + 1) - lower)) + lower, decimalPositions);
 };
 
 const randomInt = (min, max) => {
@@ -64,6 +64,7 @@ const em = {
   randomS: (lower, upper, except) => {
     let item = null;
     let count = 0;
+    except = ',' + except + ',';
     do {
       item = round((Math.random() * (upper - lower)) + lower, 0);
       count = count + 1;
@@ -78,6 +79,15 @@ const em = {
   roundA: (number, decimalPositions) => {
     return round(number, decimalPositions);
   },
+  sortNum: (arr) => {
+    
+    if (arr.startsWith('\"')) {
+      arr = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      arr = arr.split(',');
+    }
+    return '"' + arr.map(n => Number(n)).sort((a,b) => a-b).join(',') + '"';
+  }
 };
 
 module.exports = {
