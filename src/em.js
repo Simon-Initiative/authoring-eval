@@ -4,10 +4,32 @@ const round = (num, decimalPositions) => {
 };
 
 const random = (lower, upper, decimalPositions = 0) => {
-  return lower === undefined
-    ? Math.random()
-    : round((Math.random() * ((upper + 1) - lower)) + lower, decimalPositions);
+  
+  if (lower === undefined) {
+    return Math.random();
+  }
+  else if (decimalPositions === 0) {
+    // Return random integer value beween lower and upper, exluding upper,
+    // but including lower
+    return Math.floor(Math.random() * (upper - lower)) + lower;
+  } else {
+
+    // Random random decimal value between lower and upper, excluding upper,
+    // but including lower - truncated to a certain number of decimals
+    const value = (Math.random() * (upper - lower)) + lower;
+    const result = '' + value;
+    const dot = result.lastIndexOf('.');
+
+    if (dot === -1) {
+      return Number(result);
+    } else {
+      return Number(result.substr(0, dot + (decimalPositions + 1)));
+    }
+  }
+
 };
+
+
 
 const randomInt = (min, max) => {
   min = Math.ceil(min);
