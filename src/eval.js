@@ -36,16 +36,21 @@ function replaceVars(expression, evaluated) {
 }
 
 
+function stripAts(label) {
+  return label.replace(new RegExp('@', 'g'), '');
+}
+
 function orderByDependencies(variables) {
 
   const all = variables.map(v => {
 
-    const e = v.expression;
+    // replace all double @ with single @'s 
+    const e = v.expression.replace(new RegExp('@@', 'g'), '@');
 
     // Run a regexp across the expression to find all 
     // references to other variables.  Parse and store
     // the references as a map
-
+    
     const parts = e.split(/(\@V.*?\@)/);
 
     const result = {
@@ -56,15 +61,14 @@ function orderByDependencies(variables) {
       added: false,
     }
 
-
     if (parts.length === 1) {
       if (parts[0].startsWith('@') && parts[0].endsWith('@')) {
-        result.deps.push(parts[0].substring(1, parts[0].lastIndexOf('@')));
+        result.deps.push(stripAts(parts[0]));
       }
     } else if (parts.length > 1) {
       parts.forEach(p => {
         if (p.startsWith('@') && p.endsWith('@')) {
-          result.deps.push(p.substring(1, p.lastIndexOf('@')));
+          result.deps.push(stripAts(p));
         }
       })
     }
@@ -73,11 +77,9 @@ function orderByDependencies(variables) {
 
   });
 
-  
   const indexes = all.reduce((p, c, i) => { p[c.variable] = i; return p; }, {});
   
   all.forEach(d => {
-    
     d.deps.forEach(a => all[indexes[a]].referencedBy.push(d.variable));
   });
 
@@ -150,6 +152,7 @@ function evaluate(variables) {
       }
       return v;
     });
+
 
   // evaluated: Object<string, string> where the keys are variable names and values are
   // the evaluted variable expressions
