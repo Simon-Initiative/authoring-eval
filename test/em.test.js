@@ -34,7 +34,7 @@ test('em.random with lower and upper specified, upper excluded', () => {
     	em.random(3, "b");
     }).toThrow();
 
-  } 
+  }
 }); 
 
 test('em.random with no parameters specified', () => {
@@ -198,8 +198,9 @@ test ('em.almostEqual', () => {
 
 test ('em.fracA2', () => {
 
-  expect(em.fracA2(3, 4)).toBe("3,4"); // Regular inputs
+  expect(em.fracA2(3, 4)).toBe("3,4");
   expect(em.fracA2(0, 0)).toBe("0,0"); 
+  expect(em.fracA2("a", "b")).toBe("a,b");
 
 });
 
@@ -273,8 +274,8 @@ test ('em.gcd', () => {
 
 test ('em.log with only n specified', () => {
   expect(em.log(1)).toBe(0); // Input is 1
-  expect(em.log(10)).toBe(1); // If base is 10, then log(10) should equal 1
-  expect(em.log(5)).toBeCloseTo(0.69897000433, 10); // Normal Input
+  expect(em.log(Math.E)).toBeCloseTo(1); 
+  expect(em.log(5)).toBeCloseTo(1.60943791243, 10); 
 
   expect(() => em.log(true)).toThrow(); // Boolean Input
   expect(() => em.log(0)).toThrow(); // Zero Input
@@ -288,17 +289,6 @@ test ('em.log with n and base specified', () => {
 
   expect(() => em.log(13, "a")).toThrow(); // String Input
   expect(() => em.log(10, 0)).toThrow(); // Zero input for base
-
-});
-
-test ('em.ln', () => {
-  expect(em.ln(1)).toBe(0); // Regular Input
-  expect(em.ln(Math.E)).toBe(1);
-  expect(em.ln(10)).toBeCloseTo(2.30258509299); // Floating point output
-
-  expect(() => em.ln(0)).toThrow(); // Zero input (undefined)
-  expect(() => em.ln(-1)).toThrow(); // Negative Input (undefined)
-  expect(() => em.ln("a")).toThrow(); // String input
 
 });
 
@@ -494,7 +484,7 @@ test ('em.sizeStrs', () => {
 
 test ('em.sortNum', () => {
 
-  expect(em.sortNum("512, 123, 111, 6129, 13, 5")).toBe("\"5,13,111,123,512,6129\"")
+  expect(em.sortNum("512, 123, 111, 6129, 13, 5")).toBe("\"5,13,111,123,512,6129\"");
   expect(em.sortNum("0")).toBe("\"0\"");
 
   expect(() => em.sortNum("")).toThrow();
@@ -507,8 +497,9 @@ test ('em.sortNum', () => {
 
 test ('em.getAV', () => {
 
-  expect(em.getAV("1,2,3", 1)).toBe("1")
-  expect(em.getAV("a,b,c", 2)).toBe("b")
+  expect(em.getAV("1,2,3", 1)).toBe("1");
+  expect(em.getAV("a,b,c", 2)).toBe("b");
+  expect(em.getAV("true, false", 1)).toBe("true");
 
   expect(() => em.getAV("a", 2)).toThrow();
   expect(() => em.getAV("a", 0)).toThrow();
@@ -522,14 +513,13 @@ test ('em.randomS', () => {
   for (let i = 0; i < 1000; i++) {
 
     expect("" + em.randomS(0, 3, 1)).toMatch(/0|2|3/);
-    expect("" + em.randomS(0, 5, "1,2")).toMatch(/0|3|4|5/)
+    expect("" + em.randomS(0, 5, "1,2")).toMatch(/0|3|4|5/);
     expect("" + em.randomS(5)).toMatch(/0|1|2|3|4|5/);
     expect("" + em.randomS(10, 15)).toMatch(/10|11|12|13|14|15/);
 
     expect(() => em.randomS()).toThrow();
     expect(() => em.randomS("a")).toThrow();
     expect(() => em.randomS(false, true, 1)).toThrow();
-
 
   }
 

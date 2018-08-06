@@ -75,7 +75,6 @@ const em = {
   almostEqual,
   
   fracA2: (n, d) => {
-    if (typeof n != 'number' || typeof d != 'number') throw "Inputs must be numbers.";
     return n + ',' + d;
 },
   frac2Tex: (n, d) => '\\frac{' + n + '}{' + d + '}',
@@ -118,14 +117,12 @@ const em = {
     return x;
   },
 
-  log: (n, base = 10) => {
+  log: (n, base = Math.E) => {
     if (typeof n != 'number' || typeof base != 'number') throw "Inputs must be numbers.";
     else if (n <= 0) throw "log(" + n + ") is undefined.";
     else if (base <= 0) throw "base must be positive.";
     else return (Math.log(n) / Math.log(base));
   },
-
-  ln: (n) => em.log(n, Math.E),
 
   max: (a, b) =>  {
     if (typeof a != 'number' || typeof b != 'number') throw "Inputs must be numbers.";
@@ -189,7 +186,10 @@ const em = {
     }
     return arr.split(',')[index - 1];
   },
-  randomArray: (arr) => arr[randomInt(0, arr.length)], // Throws "inputs must be numbers," which may be misleading
+  randomArray: (arr) => {
+    if (arr instanceof Array) return arr[randomInt(0, arr.length)];
+    throw "Input must be an array.";
+  },
   randomBetween: (l, u) => {
     if (typeof l != 'number' || typeof u != 'number') throw "Inputs must be numbers.";
     else if (l > u) throw "u must be greater than or equal to l"
@@ -217,7 +217,7 @@ const em = {
   random,
 
   randomInt,
-  
+
   round: (number, decimalPositions = 1) => {
     return round(number, decimalPositions);
   },
