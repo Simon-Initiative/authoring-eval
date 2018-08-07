@@ -22,18 +22,6 @@ test('em.random with lower and upper specified, upper excluded', () => {
     const c = '' + em.random(-4, 2); // One negative & one positive.
     expect(c).toMatch(/-4|-3|-2|-1|0|1/);
 
-    expect(() => { // Lower > Upper
-    	em.random(3, 1);
-    }).toThrow();
-
-    expect(() => { // Lower is a string.
-    	em.random("a", 3);
-    }).toThrow();
-
-    expect(() => { // Upper is a string
-    	em.random(3, "b");
-    }).toThrow();
-
   }
 }); 
 
@@ -80,26 +68,6 @@ test('em.random with lower, upper, and decimalPosition specified', () => {
   	expect(Number(e)).toBeGreaterThanOrEqual(5.13);
   	expect(Number(e)).toBeLessThan(9.7);
 
-  	expect(() => { // Lower > Upper
-		em.random(3, 1, 4);
-    }).toThrow();
-
-    expect(() => { // decimalPositions is a floating point
-    	em.random(3, 4, 1.1);
-    }).toThrow();
-
-    expect(() => { // decimalPositions is negative
-    	em.random(4, 10, -4); 
-    }).toThrow();
-
-    expect(() => {
-    	em.random("a", "b", 3); // String inputs for lower and upper
-    }).toThrow();
-
-    expect(() => {
-    	em.random(1, 3, "a"); // String input for decimalPositions
-    }).toThrow();
-
   }
 });
 
@@ -121,14 +89,6 @@ test('em.randomInt with min and max', () => {
 	expect(d).toBeGreaterThanOrEqual(-12);
 	expect(d).toBeLessThan(-2);
 
-	expect(() => { // string inputs
-		em.randomInt("a", "b");
-	}).toThrow();
-
-	expect(() => { // boolean inputs
-		em.randomInt(true, true);
-	}).toThrow();
-
   }
 });
 
@@ -141,12 +101,6 @@ test('em.round with only the number', () => {
   expect(em.round(-1663.55)).toBe(-1663.5) // At 5, should round up
   expect(em.round(0)).toBe(0) // Zero input
   expect(em.round(0.01)).toBe(0) // Small decimal input
-  expect(() => { // boolean input
-    em.round(true);
-  }).toThrow();
-  expect(() => { // string input
-    em.randomInt("1");
-  }).toThrow();
 
 });
 
@@ -161,26 +115,6 @@ test('em.roundA with both number and decimalPositions specified', () => {
   expect(em.roundA(123.91, 0)).toBe(124); // Zero as decimalPositions
   expect(em.roundA(-123.91, 0)).toBe(-124) // Zero as decimalPositions with negative input
 
-  expect(() => {
-    em.roundA(13.132, -3) // negative input for decimalPositions
-  }).toThrow();
-
-  expect(() => {
-    em.roundA("a", 2) // string input for number
-  }).toThrow();
-
-  expect(() => {
-    em.roundA(23.12, "a") // string input for decimalPositions
-  }).toThrow();
-
-  expect(() => {
-    em.roundA(true, 4) // boolean inputs
-  }).toThrow();
-
-  expect(() => {
-    em.roundA(21.13, false) // boolean inputs
-  }).toThrow();
-
 });
 
 test ('em.almostEqual', () => {
@@ -189,10 +123,6 @@ test ('em.almostEqual', () => {
   expect(em.almostEqual(13, 13.001, 10**-3)).toBe(true);
   expect(em.almostEqual(-13, -13.001)).toBe(false);
   expect(em.almostEqual(-13, -13.001, 10**-3)).toBe(true);
-
-  expect(() => em.almostEqual("a", 3)).toThrow();
-  expect(() => em.almostEqual(3, "a")).toThrow();
-  expect(() => em.almostEqual(10, 10, "a")).toThrow();
 
 });
 
@@ -219,24 +149,17 @@ test ('em.abs', () => {
   expect(em.abs(-3.9)).toBe(3.9); // Negative floating input
   expect(em.abs(0)).toBe(0); // Zero input
 
-  expect(() => em.abs("a")).toThrow(); // string input
-  expect(() => em.abs(true)).toThrow(); // boolean input
-
 });
 
 test ('em.ceil', () => {
   expect(em.ceil(15.0001)).toBe(16); // Positive Input
   expect(em.ceil(-15.0001)).toBe(-15); // Negative Input
-  expect(() => em.ceil("a")).toThrow(); // String Input
-  expect(() => em.ceil(true)).toThrow(); // Boolean Input
 
 });
 
 test ('em.floor', () => {
   expect(em.floor(19.9999)).toBe(19); // Positive Input
   expect(em.floor(-19.9999)).toBe(-20); // Negative Input
-  expect(() => em.floor("a")).toThrow(); // String Input
-  expect(() => em.floor(true)).toThrow(); // Boolean Input
 
 });
 
@@ -245,11 +168,6 @@ test ('em.factorial', () => {
   expect(em.factorial(1)).toBe(1);
   expect(em.factorial(2)).toBe(2);
   expect(em.factorial(10)).toBe(3628800); // Positive input
-
-  expect(() => em.factorial(1.1)).toThrow(); // Decimal Input
-  expect(() => em.factorial(-1)).toThrow(); // Negative Input
-  expect(() => em.factorial("a")).toThrow(); // String Input
-  expect(() => em.factorial(true)).toThrow(); // Boolean Input
 
 });
 
@@ -260,16 +178,6 @@ test ('em.gcd', () => {
   expect(em.gcd(12, 0)).toBe(12); // Zero Input
   expect(em.gcd(12, 1)).toBe(1);
 
-  expect(() => em.gcd(-1, 12)).toThrow(); // Negative Input
-  expect(() => em.gcd(12, -1)).toThrow();
-  expect(() => em.gcd(11.1, 12)).toThrow(); // Decimal Input
-  expect(() => em.gcd(12.1, 11)).toThrow();
-  expect(() => em.gcd("a", 13)).toThrow(); // String Input
-  expect(() => em.gcd(13, "a")).toThrow();
-  expect(() => em.gcd(true, 12)).toThrow(); // Boolean Input
-  expect(() => em.gcd()).toThrow(); // No inputs given
-  expect(() => em.gcd(1)).toThrow(); // Only one input given
-
 });
 
 test ('em.log with only n specified', () => {
@@ -277,18 +185,11 @@ test ('em.log with only n specified', () => {
   expect(em.log(Math.E)).toBeCloseTo(1); 
   expect(em.log(5)).toBeCloseTo(1.60943791243, 10); 
 
-  expect(() => em.log(true)).toThrow(); // Boolean Input
-  expect(() => em.log(0)).toThrow(); // Zero Input
-  expect(() => em.log(-10)).toThrow(); // Negative Input
-
 });
 
 test ('em.log with n and base specified', () => {
   expect(em.log(2, 2)).toBe(1); // If n = base, it equals 1.
   expect(em.log(3, 4)).toBeCloseTo(0.79248125036, 10); // Normal Input
-
-  expect(() => em.log(13, "a")).toThrow(); // String Input
-  expect(() => em.log(10, 0)).toThrow(); // Zero input for base
 
 });
 
@@ -297,18 +198,12 @@ test ('em.max', () => {
   expect(em.max(-1.1, -2.3)).toBe(-1.1); // Negative, floating Inputs
   expect(em.max(0, 0)).toBe(0); // Same inputs
 
-  expect(() => em.max("a", "b")).toThrow(); // String inputs
-  expect(() => em.max(true, false)).toThrow(); // Boolean inputs
-
 });
 
 test ('em.min', () => {
   expect(em.min(1,3)).toBe(1); // Normal Input
   expect(em.min(-1.1, -2.3)).toBe(-2.3); // Negative, floating Inputs
   expect(em.min(0, 0)).toBe(0); // Same inputs
-
-  expect(() => em.min("a", "b")).toThrow(); // String inputs
-  expect(() => em.min(true, false)).toThrow(); // Boolean inputs
 
 });
 
@@ -318,10 +213,6 @@ test ('em.sqrt', () => {
   expect(em.sqrt(0)).toBe(0); // Zero Input
   expect(em.sqrt(3.2)).toBeCloseTo(1.7888543819998317, 10); // Floating input
 
-  expect(() => em.sqrt("a")).toThrow(); // String input
-  expect(() => em.sqrt(true)).toThrow(); // Boolean Input
-  expect(() => em.sqrt(-3)).toThrow(); // Negative numbers should throw
-
 });
 
 test ('em.sin', () => {
@@ -329,9 +220,6 @@ test ('em.sin', () => {
   expect(em.sin(-Math.PI / 2)).toBeCloseTo(-1, 10);
   expect(em.sin(Math.PI / 2)).toBeCloseTo(1, 10);
   expect(em.sin(20.3)).toBeCloseTo(0.9927664058359071, 10);
-
-  expect(() => em.sin("a")).toThrow(); 
-  expect(() => em.sin(true)).toThrow();
 
 });
 
@@ -341,20 +229,12 @@ test ('em.cos', () => {
   expect(em.cos(Math.PI / 2)).toBeCloseTo(0, 10);
   expect(em.cos(20.3)).toBeCloseTo(0.12006191504242673, 10);
 
-  expect(() => em.cos("a")).toThrow();
-  expect(() => em.cos(true)).toThrow();
-
 });
 
 test ('em.tan', () => {
   expect(em.tan(Math.PI)).toBeCloseTo(0, 10);
   expect(em.tan(-Math.PI)).toBeCloseTo(0, 10);
   expect(em.tan(Math.PI / 3)).toBeCloseTo(1.7320508075688767, 10);
-
-  expect(() => em.tan("a")).toThrow();
-  expect(() => em.tan(true)).toThrow();
-  expect(() => em.tan(Math.PI / 2)).toThrow();
-  expect(() => em.tan(-Math.PI / 2)).toThrow();
 
 });
 
@@ -363,9 +243,6 @@ test ('em.exp', () => {
   expect(em.exp(10)).toBeCloseTo(Math.E ** 10, 5);
   expect(em.exp(1)).toBeCloseTo(Math.E, 10);
   expect(em.exp(20)).toBeCloseTo(Math.E ** 20, 5);
-
-  expect(() => em.exp("a")).toThrow();
-  expect(() => em.exp(true)).toThrow();
 
 });
 
@@ -380,10 +257,6 @@ test ('em.pow', () => {
   expect(em.pow(-2, -4)).toBeCloseTo(0.0625, 5);
   expect(em.pow(-2.6, -3)).toBeCloseTo(-0.05689576695, 5)
 
-  expect(() => em.pow(true)).toThrow();
-  expect(() => em.pow('a')).toThrow();
-  expect(() => em.pow(-3, -0.5)).toThrow();
-
 });
 
 test ('em.toRadians', () => {
@@ -393,9 +266,6 @@ test ('em.toRadians', () => {
   expect(em.toRadians(180)).toBeCloseTo(Math.PI, 10);
   expect(em.toRadians(-360)).toBeCloseTo(-Math.PI * 2, 10);
   expect(em.toRadians(1.5)).toBeCloseTo(1.5 * (Math.PI/180), 10);
-
-  expect(() => em.toRadians('a')).toThrow();
-  expect(() => em.toRadians(false)).toThrow();
 
 });
 
@@ -410,9 +280,6 @@ test ('em.mod', () => {
   expect(em.mod(-18,-4)).toBe(-2);
   expect(em.mod(2.7, 1.3)).toBeCloseTo(.1, 10);
   expect(em.mod(8.3, -4.15)).toBeCloseTo(0, 10);
-
-  expect(() => em.mod('a', 'b')).toThrow();
-  expect(() => em.mod(true, 1)).toThrow();
 
 });
 
@@ -433,11 +300,6 @@ test ('em.randomArray', () => {
     expect('' + em.randomArray(arr4)).toMatch(/true|false/);
     expect('' + em.randomArray(arr5)).toMatch(/NaN|null|undefined/);
     expect('' + em.randomArray(arr6)).toMatch(/1|abc|true|null/);
-
-  expect(em.randomArray([])).toBe(undefined)
-  expect(() => em.randomArray(3)).toThrow();
-  expect(() => em.randomArray(true)).toThrow();
-
   }
 
 });
@@ -458,12 +320,6 @@ test ('em.randomBetween', () => {
     expect(c).toBeLessThan(19.1);
     expect(c).toBeGreaterThanOrEqual(2.54);
 
-
-  expect(() => em.randomBetween(5, 2)).toThrow();
-  expect(() => em.randomBetween("a", "b")).toThrow();
-  expect(() => em.randomBetween(3, true)).toThrow();
-  expect(() => em.randomBetween([1,2,3], 4)).toThrow();
-
   }
 
 });
@@ -475,23 +331,12 @@ test ('em.sizeStrs', () => {
   expect(em.sizeStrs("abcd")).toBe(1);
   expect(em.sizeStrs("")).toBe(1);
 
-  expect(() => em.sizeStrs(1)).toThrow();
-  expect(() => em.sizeStrs([1,2,3])).toThrow();
-  expect(() => em.sizeStrs(false)).toThrow();
-
-
 });
 
 test ('em.sortNum', () => {
 
   expect(em.sortNum("512, 123, 111, 6129, 13, 5")).toBe("\"5,13,111,123,512,6129\"");
   expect(em.sortNum("0")).toBe("\"0\"");
-
-  expect(() => em.sortNum("")).toThrow();
-  expect(() => em.sortNum("apple, pear, orange"));
-  expect(() => em.sortNum(true)).toThrow();
-  expect(() => em.sortNum(12, 14, 15, 9)).toThrow();
-  expect(() => em.sortNum()).toThrow();
 
 });
 
@@ -500,11 +345,6 @@ test ('em.getAV', () => {
   expect(em.getAV("1,2,3", 1)).toBe("1");
   expect(em.getAV("a,b,c", 2)).toBe("b");
   expect(em.getAV("true, false", 1)).toBe("true");
-
-  expect(() => em.getAV("a", 2)).toThrow();
-  expect(() => em.getAV("a", 0)).toThrow();
-  expect(() => em.getAV()).toThrow();
-  expect(() => em.getAV(true)).toThrow();
 
 });
 
@@ -516,16 +356,6 @@ test ('em.randomS', () => {
     expect("" + em.randomS(0, 5, "1,2")).toMatch(/0|3|4|5/);
     expect("" + em.randomS(5)).toMatch(/0|1|2|3|4|5/);
     expect("" + em.randomS(10, 15)).toMatch(/10|11|12|13|14|15/);
-
-    expect(() => em.randomS()).toThrow();
-    expect(() => em.randomS("a")).toThrow();
-    expect(() => em.randomS(false, true, 1)).toThrow();
-
   }
 
 });
-
-// TODO, unit test em.random with two negatives, with one negative one positive, with one
-// or more arguments equalling zero, with decimal values.  Verify that it fails (by using
-// expect.toThrow) when called with erroneous inputs (when lower greater than upper, when
-// passing in string values)
