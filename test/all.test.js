@@ -3,7 +3,7 @@ const all = require('../data/all.json');
 const evaluate = require('../src/eval').evaluate;
 
 test('all the real-world questions, 10 times', () => {
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10; i++) {
     
     const success = all.reduce((success, item) => {
       const result = evaluate(item.vars);
