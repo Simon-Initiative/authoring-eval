@@ -9,8 +9,10 @@ test('all the real-world questions, 10 times', () => {
       const result = evaluate(item.vars);
 
       if (result.some(r => r.errored === true)) {
-        console.log(item.uniqueId);
-        result.filter(r => r.errored).forEach(r => console.log(r.variable));
+        //console.log(item.uniqueId);
+        //console.log(item);
+        //console.log(result);
+
         return success;
       }
       return success + 1;
