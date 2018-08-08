@@ -11,6 +11,14 @@ const linSearch = (arr, key) => {
   return null;
 };
 
+const intDivide = (a, b) => {
+
+  division = Number(a) / Number(b);
+  if (division < 0) return Math.ceil(division);
+  return Math.floor(division);
+
+};
+
 const random = (lower, upper, decimalPositions = 0) => {
   
   if (lower === undefined) {
@@ -45,6 +53,14 @@ const randomInt = (min, max) => {
 
 const almostEqual = (a, b, difference = 10 ** -7) => {
   return Math.abs(a-b) < difference;
+};
+
+const sumArray = (arr) => {
+  total = 0
+  for (let i = 0; i < arr.length; i++) {
+    total = total + Number(arr[i])
+  }
+  return total
 };
 
 const em = {
@@ -152,9 +168,11 @@ const em = {
   round: (number, decimalPositions = 1) => {
     return round(number, decimalPositions);
   },
+
   roundA: (number, decimalPositions) => {
     return round(number, decimalPositions);
   },
+
   sortNum: (arr) => {
     if (arr.startsWith('\"')) {
       arr = arr.substring(1, arr.length - 2).split(',');
@@ -162,9 +180,89 @@ const em = {
       arr = arr.split(',');
     }
     return '"' + arr.map(n => Number(n)).sort((a,b) => a-b).join(',') + '"';
-  }
+  },
+
+  mean: (arr) => {
+    if (arr == "") throw "Input must contain at least one element."
+    if (arr.startsWith('\"')) {
+      arr = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      arr = arr.split(',');
+    }
+    return sumArray(arr) / arr.length
+  },
+
+  median: (arr) => {
+    if (arr == "") throw "Input must contain at least one element.";
+    arr = em.sortNum(arr).substring(1, arr.length + 1)
+    if (arr.startsWith('\"')) {
+      arr = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      arr = arr.split(',');
+    }
+    if (arr.length % 2 === 1) return Number(arr[intDivide(arr.length, 2)]);
+    return (Number(arr[intDivide(arr.length, 2) - 1]) + Number(arr[intDivide(arr.length, 2)])) / 2
+  },
+
+  mode: (arr) => {
+
+    if (arr == "") throw "Input must contain at least one element."
+    if (arr.startsWith('\"')) {
+      arr = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      arr = arr.split(',');
+    }
+
+    var counts = {};
+    for (var count in arr) {
+      if (arr[count] in counts) counts[arr[count]] += 1;
+      else counts[arr[count]] = 1
+
+    };
+
+    // Check if everything is the same first (no mode):
+
+    let allSame = true
+    for (var i in arr) {
+      if (counts[arr[0]] != counts[arr[i]]) allSame = false
+    };
+    if (allSame) return null
+    let maxCount = counts[arr[0]]
+    let maximum = arr[0]
+    for (var j in counts) {
+      if (counts[j] > maxCount) {
+        maxCount = counts[j]
+        maximum = j
+      }
+    };
+    return Number(maximum)
+
+  },
+
+  variance: (arr) => {
+    if (arr == "") throw "Input must contain at least one element.";
+    if (arr.startsWith('\"')) {
+      arr = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      arr = arr.split(',');
+    }
+
+    let arrMean = Number(em.mean(arr.join(',')));
+    arr = arr.map(n => (arrMean - Number(n)) ** 2);
+    return Number(em.mean(arr.join(',')));
+  },
+
+  standardDeviation: (arr) => Math.sqrt(em.variance(arr)),
+
 };
 
 module.exports = {
   em,
 };
+
+console.log(em.mode("1,2,2,2,2,3"))
+
+
+
+
+
