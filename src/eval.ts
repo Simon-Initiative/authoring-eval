@@ -1,5 +1,6 @@
 import { VM } from 'vm2';
 import { em } from './em';
+import { Maybe } from 'tsmonad';
 
 const vm = new VM({
   timeout: 300,
@@ -14,6 +15,10 @@ function run(expression: string) {
   }
 }
 
+type Evaluated = {
+  [key: string]: string | null,
+};
+
 /**
  * Replaces all variable references in an expression with their correspending value
  * already determined in the `evaluate` function
@@ -22,15 +27,17 @@ function run(expression: string) {
  * @param {Object<string, string>} evaluated A map of variable names and their values
  * @return {string} The expression with variable references replaced by their values
  */
-function replaceVars(expression: string, evaluated: { [key: string]: string }) {
+function replaceVars(expression: string, evaluated: Evaluated) {
   let newExpression = expression;
 
   Object.keys(evaluated).forEach((variable) => {
     const value = evaluated[variable];
 
     // Handle double @ and single @
-    newExpression = newExpression.replace(new RegExp('@@' + variable + '@@', 'g'), value);
-    newExpression = newExpression.replace(new RegExp('@' + variable + '@', 'g'), value);
+    newExpression = newExpression
+      .replace(new RegExp('@@' + variable + '@@', 'g'), Maybe.maybe(value).valueOr('null'));
+    newExpression = newExpression
+      .replace(new RegExp('@' + variable + '@', 'g'), Maybe.maybe(value).valueOr('null'));
   });
 
   return newExpression;
@@ -166,9 +173,6 @@ export function evaluate(variables: Variable[]) {
 
   // evaluated: Object<string, string> where the keys are variable names and values are
   // the evaluted variable expressions
-  type Evaluated = {
-    [key: string]: string | null,
-  };
   const evaluated: Evaluated = emJsReplaced
     .reduce((evaluated: Evaluated, v) => {
       const varsReplaced = replaceVars(v.expression, evaluated);

@@ -10,8 +10,7 @@ describe(`all the real-world questions, ${NUM_TEST_CYCLES} times`, () => {
     all.forEach((item) => {
       test(`question with uniqueId ${item.uniqueId}`, () => {
         const result = evaluate(item.vars);
-
-        expect(result.every(r => r.errored === false)).toEqual(true);
+        expect(result.some(r => r.errored)).toEqual(false);
       });
     });
   });
