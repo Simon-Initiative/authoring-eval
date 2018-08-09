@@ -260,8 +260,6 @@ module.exports = {
   em,
 };
 
-console.log(em.mode("1,2,2,2,2,3"))
-
 
 
 
