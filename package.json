@@ -4,13 +4,15 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "jest"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.3",
     "express-cluster": "0.0.5",
+    "jest": "^23.4.1",
     "vm2": "^3.6.0"
   }
 }
