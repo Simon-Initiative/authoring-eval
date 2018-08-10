@@ -1,8 +1,8 @@
 const em = require('../src/em').em;
 
 // This is one unit test.
-xtest('em.random with lower and upper specified, upper excluded', () => {
-  for (let i = 0; i < 1000; i++) {
+test('em.random with lower and upper specified, upper excluded', () => {
+  for (let i = 0; i < 1000; i = i + 1) {
 
     const v = '' + em.random(4, 6); // Normal, positive case.
     expect(v).toMatch(/4|5/);
@@ -10,7 +10,7 @@ xtest('em.random with lower and upper specified, upper excluded', () => {
     const a = '' + em.random(0, 5); // One parameter is 0 (w/ positive) test case.
     expect(a).toMatch(/0|1|2|3|4/);
 
-    expect(em.random(0,0)).toBe(0); // Both parameters are 0 test case.
+    expect(em.random(0, 0)).toBe(0); // Both parameters are 0 test case.
 
     expect(em.random(14, 14)).toBe(14); // Same number, positive.
 
@@ -25,8 +25,8 @@ xtest('em.random with lower and upper specified, upper excluded', () => {
   }
 });
 
-xtest('em.random with no parameters specified', () => {
-  for (let i = 0; i < 1000; i++) {
+test('em.random with no parameters specified', () => {
+  for (let i = 0; i < 1000; i = i + 1) {
 
   	expect(em.random()).toBeGreaterThanOrEqual(0); // Lower bound
   	expect(em.random()).toBeLessThan(1); // Upper bound
@@ -34,26 +34,26 @@ xtest('em.random with no parameters specified', () => {
   }
 });
 
-xtest('em.random with lower, upper, and decimalPosition specified', () => {
-  for (let i = 0; i < 1000; i ++) {
+test('em.random with lower, upper, and decimalPosition specified', () => {
+  for (let i = 0; i < 1000; i = i + 1) {
 
   	const a = '' + em.random(3, 8, 2); // Normal case, two positives
-  	const dotIndexA = a.lastIndexOf(".");
-  	const dotToEndA = a.length - dotIndexA - 1
+  	const dotIndexA = a.lastIndexOf('.');
+  	const dotToEndA = a.length - dotIndexA - 1;
   	expect(dotToEndA).toBeLessThanOrEqual(2);
   	expect(Number(a)).toBeGreaterThanOrEqual(3);
   	expect(Number(a)).toBeLessThan(8);
 
   	const b = '' + em.random(-3, 2, 3); // Negative Number to Positive
-  	const dotIndexB = b.lastIndexOf(".");
-  	const dotToEndB = b.length - dotIndexB - 1
+  	const dotIndexB = b.lastIndexOf('.');
+  	const dotToEndB = b.length - dotIndexB - 1;
   	expect(dotToEndB).toBeLessThanOrEqual(3);
   	expect(Number(b)).toBeGreaterThanOrEqual(-3);
   	expect(Number(b)).toBeLessThan(2);
 
   	const c = '' + em.random(-2, 0, 5); // One zero, one negative
-  	const dotIndexC = c.lastIndexOf(".");
-  	const dotToEndC = c.length - dotIndexC - 1
+  	const dotIndexC = c.lastIndexOf('.');
+  	const dotToEndC = c.length - dotIndexC - 1;
   	expect(dotToEndC).toBeLessThanOrEqual(5);
   	expect(Number(c)).toBeGreaterThanOrEqual(-2);
   	expect(Number(c)).toBeLessThan(0);
@@ -62,8 +62,8 @@ xtest('em.random with lower, upper, and decimalPosition specified', () => {
   	expect(Number(d)).toBe(0);
 
   	const e = '' + em.random(5.13, 9.7, 4);
-  	const dotIndexE = e.lastIndexOf(".");
-  	const dotToEndE = e.length - dotIndexE - 1
+  	const dotIndexE = e.lastIndexOf('.');
+  	const dotToEndE = e.length - dotIndexE - 1;
   	expect(dotToEndE).toBeLessThanOrEqual(4);
   	expect(Number(e)).toBeGreaterThanOrEqual(5.13);
   	expect(Number(e)).toBeLessThan(9.7);
@@ -71,77 +71,76 @@ xtest('em.random with lower, upper, and decimalPosition specified', () => {
   }
 });
 
-xtest('em.randomInt with min and max', () => {
-  for (let i = 0; i < 1000; i++) {
-	const a = em.randomInt(3, 15); // Normal inputs (positive)
-	expect(a).toBeGreaterThanOrEqual(3);
-	expect(a).toBeLessThan(15);
+test('em.randomInt with min and max', () => {
+  for (let i = 0; i < 1000; i = i + 1) {
+    const a = em.randomInt(3, 15); // Normal inputs (positive)
+    expect(a).toBeGreaterThanOrEqual(3);
+    expect(a).toBeLessThan(15);
 
-	const b = em.randomInt(4.4, 9.1); // Floating point inputs
-	expect(b).toBeGreaterThanOrEqual(5);
-	expect(b).toBeLessThan(9);
+    const b = em.randomInt(4.4, 9.1); // Floating point inputs
+    expect(b).toBeGreaterThanOrEqual(5);
+    expect(b).toBeLessThan(9);
 
-	const c = em.randomInt(-4, 19); // Negative inputs
-	expect(c).toBeGreaterThanOrEqual(-4);
-	expect(c).toBeLessThan(19);
+    const c = em.randomInt(-4, 19); // Negative inputs
+    expect(c).toBeGreaterThanOrEqual(-4);
+    expect(c).toBeLessThan(19);
 
-	const d = em.randomInt(-12.3, -1.7); // Negative floating point inputs
-	expect(d).toBeGreaterThanOrEqual(-12);
-	expect(d).toBeLessThan(-2);
-
+    const d = em.randomInt(-12.3, -1.7); // Negative floating point inputs
+    expect(d).toBeGreaterThanOrEqual(-12);
+    expect(d).toBeLessThan(-2);
   }
 });
 
-xtest('em.round with only the number', () => {
+test('em.round with only the number', () => {
 
   expect(em.round(13.4812)).toBe(13.5); // Normal case, positive number
   expect(em.round(137)).toBe(137); // Whole number
   expect(em.round(1513.55)).toBe(1513.6); // At 5, should round up
   expect(em.round(-13)).toBe(-13); // Negative input
-  expect(em.round(-1663.55)).toBe(-1663.5) // At 5, should round up
-  expect(em.round(0)).toBe(0) // Zero input
-  expect(em.round(0.01)).toBe(0) // Small decimal input
+  expect(em.round(-1663.55)).toBe(-1663.5); // At 5, should round up
+  expect(em.round(0)).toBe(0); // Zero input
+  expect(em.round(0.01)).toBe(0); // Small decimal input
 
 });
 
-xtest('em.roundA with both number and decimalPositions specified', () => {
+test('em.roundA with both number and decimalPositions specified', () => {
 
   expect(em.roundA(14.4812, 2)).toBe(14.48); // Normal case, positve number
-  expect(em.roundA(194, 2)).toBe(194); //Normal Case
+  expect(em.roundA(194, 2)).toBe(194); // Normal Case
   expect(em.roundA(14.5555, 3)).toBe(14.556); // At 5, should round up
   expect(em.roundA(-14.12833, 2)).toBe(-14.13); // Negative input
   expect(em.roundA(-14.55555, 4)).toBe(-14.5555); // At 5, should round up
   expect(em.roundA(0, 0)).toBe(0); // Zero input
   expect(em.roundA(123.91, 0)).toBe(124); // Zero as decimalPositions
-  expect(em.roundA(-123.91, 0)).toBe(-124) // Zero as decimalPositions with negative input
+  expect(em.roundA(-123.91, 0)).toBe(-124); // Zero as decimalPositions with negative input
 
 });
 
-xtest('em.almostEqual', () => {
+test('em.almostEqual', () => {
 
   expect(em.almostEqual(13, 13.001)).toBe(false);
-  expect(em.almostEqual(13, 13.001, 10**-3)).toBe(true);
+  expect(em.almostEqual(13, 13.001, 10 ** -3)).toBe(true);
   expect(em.almostEqual(-13, -13.001)).toBe(false);
-  expect(em.almostEqual(-13, -13.001, 10**-3)).toBe(true);
+  expect(em.almostEqual(-13, -13.001, 10 ** -3)).toBe(true);
 
 });
 
-xtest('em.fracA2', () => {
+test('em.fracA2', () => {
 
-  expect(em.fracA2(3, 4)).toBe("3,4");
-  expect(em.fracA2(0, 0)).toBe("0,0");
-  expect(em.fracA2("a", "b")).toBe("a,b");
-
-});
-
-xtest('em.frac2Tex', () => {
-
-  expect(em.frac2Tex(3, 4)).toBe("\\frac{3}{4}"); // Regular inputs
-  expect(em.frac2Tex(0, 0)).toBe("\\frac{0}{0}");
+  expect(em.fracA2(3, 4)).toBe('3,4');
+  expect(em.fracA2(0, 0)).toBe('0,0');
+  expect(em.fracA2('a', 'b')).toBe('a,b');
 
 });
 
-xtest('em.abs', () => {
+test('em.frac2Tex', () => {
+
+  expect(em.frac2Tex(3, 4)).toBe('\\frac{3}{4}'); // Regular inputs
+  expect(em.frac2Tex(0, 0)).toBe('\\frac{0}{0}');
+
+});
+
+test('em.abs', () => {
 
   expect(em.abs(3)).toBe(3); // Positive input
   expect(em.abs(-3)).toBe(3); // Negative Input
@@ -151,19 +150,19 @@ xtest('em.abs', () => {
 
 });
 
-xtest('em.ceil', () => {
+test('em.ceil', () => {
   expect(em.ceil(15.0001)).toBe(16); // Positive Input
   expect(em.ceil(-15.0001)).toBe(-15); // Negative Input
 
 });
 
-xtest('em.floor', () => {
+test('em.floor', () => {
   expect(em.floor(19.9999)).toBe(19); // Positive Input
   expect(em.floor(-19.9999)).toBe(-20); // Negative Input
 
 });
 
-xtest('em.factorial', () => {
+test('em.factorial', () => {
   expect(em.factorial(0)).toBe(1); // Zero input
   expect(em.factorial(1)).toBe(1);
   expect(em.factorial(2)).toBe(2);
@@ -171,7 +170,7 @@ xtest('em.factorial', () => {
 
 });
 
-xtest('em.gcd', () => {
+test('em.gcd', () => {
 
   expect(em.gcd(20, 50)).toBe(10); // Normal, positive input
   expect(em.gcd(330, 75)).toBe(15);
@@ -180,34 +179,34 @@ xtest('em.gcd', () => {
 
 });
 
-xtest('em.log with only n specified', () => {
+test('em.log with only n specified', () => {
   expect(em.log(1)).toBe(0); // Input is 1
   expect(em.log(Math.E)).toBeCloseTo(1);
   expect(em.log(5)).toBeCloseTo(1.60943791243, 10);
 
 });
 
-xtest('em.log with n and base specified', () => {
+test('em.log with n and base specified', () => {
   expect(em.log(2, 2)).toBe(1); // If n = base, it equals 1.
   expect(em.log(3, 4)).toBeCloseTo(0.79248125036, 10); // Normal Input
 
 });
 
-xtest('em.max', () => {
-  expect(em.max(1,3)).toBe(3); // Normal Input
+test('em.max', () => {
+  expect(em.max(1, 3)).toBe(3); // Normal Input
   expect(em.max(-1.1, -2.3)).toBe(-1.1); // Negative, floating Inputs
   expect(em.max(0, 0)).toBe(0); // Same inputs
 
 });
 
-xtest('em.min', () => {
-  expect(em.min(1,3)).toBe(1); // Normal Input
+test('em.min', () => {
+  expect(em.min(1, 3)).toBe(1); // Normal Input
   expect(em.min(-1.1, -2.3)).toBe(-2.3); // Negative, floating Inputs
   expect(em.min(0, 0)).toBe(0); // Same inputs
 
 });
 
-xtest('em.sqrt', () => {
+test('em.sqrt', () => {
   expect(em.sqrt(4)).toBe(2);
   expect(em.sqrt(9)).toBe(3);
   expect(em.sqrt(0)).toBe(0); // Zero Input
@@ -215,7 +214,7 @@ xtest('em.sqrt', () => {
 
 });
 
-xtest('em.sin', () => {
+test('em.sin', () => {
   expect(em.sin(Math.PI)).toBeCloseTo(0, 10);
   expect(em.sin(-Math.PI / 2)).toBeCloseTo(-1, 10);
   expect(em.sin(Math.PI / 2)).toBeCloseTo(1, 10);
@@ -223,7 +222,7 @@ xtest('em.sin', () => {
 
 });
 
-xtest('em.cos', () => {
+test('em.cos', () => {
   expect(em.cos(Math.PI)).toBeCloseTo(-1, 10);
   expect(em.cos(-Math.PI / 2)).toBeCloseTo(0, 10);
   expect(em.cos(Math.PI / 2)).toBeCloseTo(0, 10);
@@ -231,14 +230,14 @@ xtest('em.cos', () => {
 
 });
 
-xtest('em.tan', () => {
+test('em.tan', () => {
   expect(em.tan(Math.PI)).toBeCloseTo(0, 10);
   expect(em.tan(-Math.PI)).toBeCloseTo(0, 10);
   expect(em.tan(Math.PI / 3)).toBeCloseTo(1.7320508075688767, 10);
 
 });
 
-xtest('em.exp', () => {
+test('em.exp', () => {
 
   expect(em.exp(10)).toBeCloseTo(Math.E ** 10, 5);
   expect(em.exp(1)).toBeCloseTo(Math.E, 10);
@@ -246,7 +245,7 @@ xtest('em.exp', () => {
 
 });
 
-xtest('em.pow', () => {
+test('em.pow', () => {
 
   expect(em.pow(2, 3)).toBe(8);
   expect(em.pow(0, 0)).toBe(1);
@@ -255,44 +254,44 @@ xtest('em.pow', () => {
   expect(em.pow(3, 4)).toBe(81);
   expect(em.pow(-3, 2)).toBe(9);
   expect(em.pow(-2, -4)).toBeCloseTo(0.0625, 5);
-  expect(em.pow(-2.6, -3)).toBeCloseTo(-0.05689576695, 5)
+  expect(em.pow(-2.6, -3)).toBeCloseTo(-0.05689576695, 5);
 
 });
 
-xtest('em.toRadians', () => {
+test('em.toRadians', () => {
 
   expect(em.toRadians(0)).toBe(0);
   expect(em.toRadians(360)).toBeCloseTo(Math.PI * 2, 10);
   expect(em.toRadians(180)).toBeCloseTo(Math.PI, 10);
   expect(em.toRadians(-360)).toBeCloseTo(-Math.PI * 2, 10);
-  expect(em.toRadians(1.5)).toBeCloseTo(1.5 * (Math.PI/180), 10);
+  expect(em.toRadians(1.5)).toBeCloseTo(1.5 * (Math.PI / 180), 10);
 
 });
 
-xtest('em.mod', () => {
+test('em.mod', () => {
 
-  expect(em.mod(1,2)).toBe(1);
-  expect(em.mod(2,2)).toBe(0);
+  expect(em.mod(1, 2)).toBe(1);
+  expect(em.mod(2, 2)).toBe(0);
   expect(em.mod(623, 25)).toBe(23);
   expect(em.mod(-7, 3)).toBe(-1);
-  expect(em.mod(-15,3)).toBeCloseTo(0,10);
+  expect(em.mod(-15, 3)).toBeCloseTo(0, 10);
   expect(em.mod(18, -5)).toBe(3);
-  expect(em.mod(-18,-4)).toBe(-2);
+  expect(em.mod(-18, -4)).toBe(-2);
   expect(em.mod(2.7, 1.3)).toBeCloseTo(.1, 10);
   expect(em.mod(8.3, -4.15)).toBeCloseTo(0, 10);
 
 });
 
-xtest('em.randomArray', () => {
+test('em.randomArray', () => {
 
-  var arr1 = [1];
-  var arr2 = [1, 5, 10];
-  var arr3 = ['abc', 'def', 'ghi', 'jkl'];
-  var arr4 = [true, false];
-  var arr5 = [NaN, null, undefined];
-  var arr6 = [1, 'abc', true, null];
+  const arr1 = [1];
+  const arr2 = [1, 5, 10];
+  const arr3 = ['abc', 'def', 'ghi', 'jkl'];
+  const arr4 = [true, false];
+  const arr5 = [NaN, null, undefined];
+  const arr6 = [1, 'abc', true, null];
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 1000; i = i + 1) {
 
     expect(em.randomArray(arr1)).toBe(1);
     expect('' + em.randomArray(arr2)).toMatch(/1|5|10/);
@@ -304,9 +303,9 @@ xtest('em.randomArray', () => {
 
 });
 
-xtest('em.randomBetween', () => {
+test('em.randomBetween', () => {
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 1000; i = i + 1) {
 
     const a = em.randomBetween(1, 10);
     expect(a).toBeLessThan(10);
@@ -324,38 +323,38 @@ xtest('em.randomBetween', () => {
 
 });
 
-xtest('em.sizeStrs', () => {
+test('em.sizeStrs', () => {
 
-  expect(em.sizeStrs("Apple, Banana, Pineapple, Strawberry")).toBe(4);
-  expect(em.sizeStrs(",,,,,")).toBe(6);
-  expect(em.sizeStrs("abcd")).toBe(1);
-  expect(em.sizeStrs("")).toBe(1);
-
-});
-
-xtest('em.sortNum', () => {
-
-  expect(em.sortNum("512, 123, 111, 6129, 13, 5")).toBe("\"5,13,111,123,512,6129\"");
-  expect(em.sortNum("0")).toBe("\"0\"");
+  expect(em.sizeStrs('Apple, Banana, Pineapple, Strawberry')).toBe(4);
+  expect(em.sizeStrs(',,,,,')).toBe(6);
+  expect(em.sizeStrs('abcd')).toBe(1);
+  expect(em.sizeStrs('')).toBe(1);
 
 });
 
-xtest('em.getAV', () => {
+test('em.sortNum', () => {
 
-  expect(em.getAV("1,2,3", 1)).toBe("1");
-  expect(em.getAV("a,b,c", 2)).toBe("b");
-  expect(em.getAV("true, false", 1)).toBe("true");
+  expect(em.sortNum('512, 123, 111, 6129, 13, 5')).toBe('"5,13,111,123,512,6129"');
+  expect(em.sortNum('0')).toBe('"0"');
 
 });
 
-xtest('em.randomS', () => {
+test('em.getAV', () => {
 
-  for (let i = 0; i < 1000; i++) {
+  expect(em.getAV('1,2,3', 1)).toBe('1');
+  expect(em.getAV('a,b,c', 2)).toBe('b');
+  expect(em.getAV('true, false', 1)).toBe('true');
 
-    expect("" + em.randomS(0, 3, 1)).toMatch(/0|2|3/);
-    expect("" + em.randomS(0, 5, "1,2")).toMatch(/0|3|4|5/);
-    expect("" + em.randomS(5)).toMatch(/0|1|2|3|4|5/);
-    expect("" + em.randomS(10, 15)).toMatch(/10|11|12|13|14|15/);
+});
+
+test('em.randomS', () => {
+
+  for (let i = 0; i < 1000; i = i + 1) {
+
+    expect('' + em.randomS(0, 3, 1)).toMatch(/0|2|3/);
+    expect('' + em.randomS(0, 5, '1,2')).toMatch(/0|3|4|5/);
+    expect('' + em.randomS(5)).toMatch(/0|1|2|3|4|5/);
+    expect('' + em.randomS(10, 15)).toMatch(/10|11|12|13|14|15/);
   }
 
 });
