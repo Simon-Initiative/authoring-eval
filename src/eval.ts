@@ -15,8 +15,37 @@ function run(expression: string) {
   }
 }
 
+function runModule(expression: string): Evaluation[] {
+  try {
+    if (!expression.includes('module.exports')) {
+      throw Error('No module exports defined');
+    }
+    const moduleExpression = `var module = {};\n${expression}\nmodule.exports;`;
+
+    const result = vm.run(moduleExpression);
+
+    return Object.keys(result).map(key => ({
+      variable: key,
+      result: result[key],
+      errored: false,
+    }));
+  } catch (e) {
+    return [{
+      variable: 'module',
+      result: e,
+      errored: true,
+    }];
+  }
+}
+
 type Evaluated = {
   [key: string]: string | null,
+};
+
+type Evaluation = {
+  variable: string;
+  result: string | null;
+  errored: boolean;
 };
 
 /**
@@ -124,26 +153,17 @@ function orderByDependencies(variables: Variable[]) {
   return order;
 }
 
-/* interface Variable {
- *   variable: string;
- *   expression: string;
- * }
- */
-
-/* interface Evaluation {
- *   variable: string;
- *   result: string;
- *   errored: boolean;
- * }
- */
-
 /**
  * Evaluate a list of expressions. It does not allow forward references, so expressions
  * must only refer to variables previously defined.
  * @param {Variable[]} variables
  * @return {Evaluation[]}
  */
-export function evaluate(variables: Variable[]) {
+export function evaluate(variables: Variable[]): Evaluation[] {
+
+  if (variables.length === 1 && variables[0].variable === 'module') {
+    return runModule(variables[0].expression);
+  }
 
   const ordered = orderByDependencies(variables);
 
@@ -157,9 +177,6 @@ export function evaluate(variables: Variable[]) {
   const emJsReplaced = ordered
     .map((v) => {
       if (v.expression.startsWith('em.emJs(')) {
-        // 'em.emJs(x=x+1; return x;)'
-        // '()=>{
-
         let body = v.expression.substr(8);
         body = body.substr(0, body.length - 1);
 
@@ -190,10 +207,9 @@ export function evaluate(variables: Variable[]) {
       return evaluated;
     },      {});
 
-  return Object.keys(evaluated).map(k =>
-    ({ variable: k, result: evaluated[k], errored: evaluated[k] === null }));
+  return Object.keys(evaluated).map(k => ({
+    variable: k,
+    result: evaluated[k],
+    errored: evaluated[k] === null,
+  }));
 }
-
-module.exports = {
-  evaluate,
-};
