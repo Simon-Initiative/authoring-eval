@@ -40,8 +40,6 @@ function runModule(expression: string): Evaluation[] {
   try {
     vm.run(script);
 
-    console.log('moduleExports', moduleExports)
-
     return Object.keys(moduleExports.exports).map(key => ({
       variable: key,
       result: (moduleExports.exports as any)[key],
