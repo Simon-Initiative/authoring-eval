@@ -1,13 +1,13 @@
-import { VM } from 'vm2';
+import { VM, VMScript } from 'vm2';
 import { em } from './em';
 import { Maybe } from 'tsmonad';
 
-const vm = new VM({
-  timeout: 300,
-  sandbox: { em },
-});
-
 function run(expression: string) {
+  const vm = new VM({
+    timeout: 300,
+    sandbox: { em },
+  });
+
   try {
     return vm.run(expression);
   } catch (e) {
@@ -16,23 +16,41 @@ function run(expression: string) {
 }
 
 function runModule(expression: string): Evaluation[] {
+  const moduleExports = { exports: {} };
+  const vm = new VM({
+    timeout: 300,
+    sandbox: { em, module: moduleExports },
+  });
+  let script;
+
   try {
     if (!expression.includes('module.exports')) {
       throw Error('No module exports defined');
     }
-    const moduleExpression = `var module = {};\n${expression}\nmodule.exports;`;
 
-    const result = vm.run(moduleExpression);
-
-    return Object.keys(result).map(key => ({
-      variable: key,
-      result: result[key],
-      errored: false,
-    }));
-  } catch (e) {
+    script = new VMScript(expression).compile();
+  } catch (err) {
     return [{
       variable: 'module',
-      result: e,
+      result: `Failed to compile script: ${err}`,
+      errored: true,
+    }];
+  }
+
+  try {
+    vm.run(script);
+
+    console.log('moduleExports', moduleExports)
+
+    return Object.keys(moduleExports.exports).map(key => ({
+      variable: key,
+      result: (moduleExports.exports as any)[key],
+      errored: false,
+    }));
+  } catch (err) {
+    return [{
+      variable: 'module',
+      result: `Failed to execute script: ${err}`,
       errored: true,
     }];
   }
