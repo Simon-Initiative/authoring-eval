@@ -1,7 +1,7 @@
 import { VM, VMScript } from 'vm2';
 import { em } from './em';
 import { Maybe } from 'tsmonad';
-import * as Oli from './oli';
+import * as OLI from './oli';
 
 function run(expression: string) {
   const vm = new VM({
@@ -20,7 +20,7 @@ function runModule(expression: string): Evaluation[] {
   const moduleExports = { exports: {} };
   const vm = new VM({
     timeout: 300,
-    sandbox: { Oli, module: moduleExports },
+    sandbox: { OLI, module: moduleExports },
   });
   let script;
 

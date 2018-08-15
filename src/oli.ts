@@ -10,19 +10,6 @@ export const almostEqual = (a: number, b: number, difference = 10 ** -7) => {
 };
 
 /**
- * Returns the factorial of a number.
- * @param n - The number to calculate the factorial of
- * @returns The factorial of `n`
- */
-export const factorial = (n: number) => {
-  let result = 1;
-  for (let i = n; i > 0; i = i - 1) {
-    result = result * i;
-  }
-  return result;
-};
-
-/**
  * Returns The greatest common divisor of two dividends.
  * @param x - The first dividend
  * @param y  - The second dividend

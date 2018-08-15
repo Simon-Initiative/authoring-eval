@@ -12,12 +12,6 @@ describe('Oli Module', () => {
     });
   });
 
-  describe('factorial', () => {
-    test('should calculate factorial', () => {
-      expect(Oli.factorial(5)).toBe(120);
-    });
-  });
-
   describe('gcd', () => {
     test('should calculate greatest common divisor of 220 and 8', () => {
       expect(Oli.gcd(220, 8)).toBe(4);
