@@ -358,3 +358,63 @@ test('em.randomS', () => {
   }
 
 });
+
+test('em.mean', () => {
+  expect(em.mean('1,2,3,4,5')).toBe(3);
+  expect(em.mean('5,5,5,5,5,5')).toBe(5);
+  expect(em.mean('-3,5,1,-7,2')).toBeCloseTo(-0.4, 10);
+  expect(em.mean('0,0,0')).toBe(0);
+  expect(() => em.mean('')).toThrow();
+  expect(() => em.mean(1, 2, 3)).toThrow();
+  expect(() => em.mean()).toThrow();
+});
+
+test('em.median', () => {
+  expect(em.median('1,2,3,4,5')).toBe(3);
+  expect(em.median('5,5,5,5,5,5')).toBe(5);
+  expect(em.median('-3,5,1,-7,2')).toBe(1);
+  expect(em.median('0,0,0')).toBe(0);
+  expect(em.median('5,1,3,9,9,4')).toBeCloseTo(4.5, 10);
+  expect(em.median('1,1,2,2.31,5,5,6.81,12')).toBeCloseTo(3.655, 10);
+  expect(() => em.median('')).toThrow();
+  expect(() => em.median(1, 2, 3)).toThrow();
+  expect(() => em.median()).toThrow();
+});
+
+test('em.mode', () => {
+  expect(em.mode('1,2,3')).toBe(null);
+  expect(em.mode('1,2,2,2,2,3')).toBe(2);
+  expect(em.mode('1,2,3,3,4,4') + '').toMatch(/3|4/);
+  expect(em.mode('-3,0,4,5,-3,-7,2')).toBe(-3);
+  expect(em.mode('0.5,18.3,9.1,-7.8,-7.9,0.5')).toBe(0.5);
+  expect(() => em.mode('')).toThrow();
+  expect(() => em.mode(1, 2, 3)).toThrow();
+  expect(() => em.mode()).toThrow();
+});
+
+test('em.variance', () => {
+  expect(em.variance('1,3,4,5,9,3,6,1,3,7,1,12,3')).toBeCloseTo(10.094674556213, 10);
+  expect(em.variance('3,3,3,3,3,3')).toBe(0);
+  expect(em.variance('3,3,3,3,3,3,4')).toBeCloseTo(0.12244897959184, 10);
+  expect(em.variance('1,2,3,4,5')).toBe(2);
+  expect(em.variance('-4,-3,1,2,5')).toBeCloseTo(10.96, 10);
+  expect(em.variance('1')).toBe(0);
+  expect(em.variance('-6.7,1.92,3,-7.84,-1,0,3.1')).toBeCloseTo(17.367624489796, 10);
+  expect(() => em.variance('')).toThrow();
+  expect(() => em.variance(1, 2, 3)).toThrow();
+  expect(() => em.variance()).toThrow();
+});
+
+test('em.standardDeviation', () => {
+  expect(em.standardDeviation('1,3,4,5,9,3,6,1,3,7,1,12,3')).toBeCloseTo(3.1772117581636, 10);
+  expect(em.standardDeviation('3,3,3,3,3,3')).toBe(0);
+  expect(em.standardDeviation('3,3,3,3,3,3,4')).toBeCloseTo(0.34992710611188, 10);
+  expect(em.standardDeviation('1,2,3,4,5')).toBeCloseTo(Math.sqrt(2), 10);
+  expect(em.standardDeviation('-4,-3,1,2,5')).toBeCloseTo(Math.sqrt(10.96), 10);
+  expect(em.standardDeviation('1')).toBe(0);
+  expect(em.standardDeviation('-6.7,1.92,3,-7.84,-1,0,3.1'))
+    .toBeCloseTo(Math.sqrt(17.367624489796), 10);
+  expect(() => em.standardDeviation('')).toThrow();
+  expect(() => em.standardDeviation(1, 2, 3)).toThrow();
+  expect(() => em.standardDeviation()).toThrow();
+});
