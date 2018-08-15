@@ -51,7 +51,7 @@ export const toRadians = (d: number) => {
  * @param num - The number to round
  * @param decimalPositions - The number of decimal positions to round to
  */
-export const round = (num: number, decimalPositions: number = 0) => {
+export const round = (num: number, decimalPositions: number = 1) => {
   const m = Math.pow(10, decimalPositions);
   return Math.round(num * m) / m;
 };
