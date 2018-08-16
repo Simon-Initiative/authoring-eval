@@ -11,6 +11,15 @@ const linSearch = (arr: string, key: string) => {
   return null;
 };
 
+const intDivide = (a: number, b: number) => {
+  const division = Number(a) / Number(b);
+  if (division < 0) {
+    return Math.ceil(division);
+  }
+
+  return Math.floor(division);
+};
+
 const random = (lower: number, upper: number, decimalPositions = 0) => {
 
   if (lower === undefined) {
@@ -41,6 +50,10 @@ const randomInt = (min: number, max: number) => {
 
 const almostEqual = (a: number, b: number, difference = 10 ** -7) => {
   return Math.abs(a - b) < difference;
+};
+
+const sumArray = (arr: string[]) => {
+  return arr.reduce((total, val) => total + Number(val), 0);
 };
 
 export const em = {
@@ -163,4 +176,83 @@ export const em = {
     }
     return '"' + result.map(n => Number(n)).sort((a, b) => a - b).join(',') + '"';
   },
+
+  mean: (arr: string) => {
+    if (arr === '') throw 'Input must contain at least one element.';
+
+    let items = [];
+    if (arr.startsWith('\"')) {
+      items = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      items = arr.split(',');
+    }
+    return sumArray(items) / items.length;
+  },
+
+  median: (arr: string) => {
+    if (arr === '') throw 'Input must contain at least one element.';
+    const sortedString = em.sortNum(arr).substring(1, arr.length + 1);
+    let items = [];
+    if (arr.startsWith('\"')) {
+      items = sortedString.substring(1, sortedString.length - 2).split(',');
+    } else {
+      items = sortedString.split(',');
+    }
+    if (items.length % 2 === 1) return Number(items[intDivide(items.length, 2)]);
+    return (Number(items[intDivide(items.length, 2) - 1])
+      + Number(items[intDivide(items.length, 2)])) / 2;
+  },
+
+  mode: (arr: string) => {
+    if (arr === '') throw 'Input must contain at least one element.';
+    let items = [];
+    if (arr.startsWith('\"')) {
+      items = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      items = arr.split(',');
+    }
+
+    const counts = {} as any;
+    for (const count in items) {
+      if (items[count] in counts) {
+        counts[items[count]] += 1;
+      } else {
+        counts[items[count]] = 1;
+      }
+    }
+
+    // Check if everything is the same first (no mode):
+
+    let allSame = true;
+    for (const i in items) {
+      if (counts[items[0]] !== counts[items[i]]) allSame = false;
+    }
+    if (allSame) return null;
+    let maxCount = counts[items[0]];
+    let maximum = items[0];
+    for (const j in counts) {
+      if (counts[j] > maxCount) {
+        maxCount = counts[j];
+        maximum = j;
+      }
+    }
+    return Number(maximum);
+  },
+
+  variance: (arr: string) => {
+    if (arr === '') throw 'Input must contain at least one element.';
+    let items = [];
+    if (arr.startsWith('\"')) {
+      items = arr.substring(1, arr.length - 2).split(',');
+    } else {
+      items = arr.split(',');
+    }
+
+    const arrMean = Number(em.mean(items.join(',')));
+    items = items.map(n => (arrMean - Number(n)) ** 2);
+    return Number(em.mean(items.join(',')));
+  },
+
+  standardDeviation: (arr: string) => Math.sqrt(em.variance(arr)),
+
 };
