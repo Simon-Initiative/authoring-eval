@@ -3,6 +3,14 @@ import { em } from './em';
 import { Maybe } from 'tsmonad';
 import * as OLI from './oli';
 
+/** Available module 3rd party libraries */
+const PD = require('probability-distributions');
+const ss = require('simple-statistics');
+const math = require('mathjs');
+const algebra = require('algebra.js');
+const numeral = require('numeral');
+const _ = require('lodash');
+
 function run(expression: string) {
   const vm = new VM({
     timeout: 300,
@@ -20,7 +28,16 @@ function runModule(expression: string): Evaluation[] {
   const moduleExports = { exports: {} };
   const vm = new VM({
     timeout: 300,
-    sandbox: { OLI, module: moduleExports },
+    sandbox: {
+      OLI,
+      PD,
+      ss,
+      math,
+      algebra,
+      numeral,
+      _,
+      module: moduleExports,
+    },
   });
   let script;
 
