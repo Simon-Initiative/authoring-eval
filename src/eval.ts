@@ -47,8 +47,8 @@ function runModule(expression: string): Evaluation[] {
     }));
   } catch (err) {
     return [{
-      variable: 'module',
-      result: `Failed to execute script: ${err}`,
+      variable: 'Error',
+      result: `${err}`,
       errored: true,
     }];
   }
@@ -170,22 +170,25 @@ function orderByDependencies(variables: Variable[]) {
 }
 
 /**
- * Evaluate a list of expressions. It does not allow forward references, so expressions
- * must only refer to variables previously defined.
+ * Evaluate a list of expressions, returning a list of Evaluations of size count
  * @param {Variable[]} variables
- * @return {Evaluation[]}
+ * @param {number} count
+ * @return {Evaluation[][]}
  */
-export function evaluate(variables: Variable[]): Evaluation[] {
+export function evaluate(variables: Variable[], count: number = 1): Evaluation[][] {
 
   if (variables.length === 1 && variables[0].variable === 'module') {
-    return runModule(variables[0].expression);
+    // Run the evaluation `count` times
+    return [...Array(count).fill(undefined)].map((_) => {
+      return runModule(variables[0].expression);
+    });
   }
 
   const ordered = orderByDependencies(variables);
 
   if (ordered.length !== variables.length) {
-    return Object.keys(variables).map(k =>
-      ({ variable: k, result: 'cycle detected', errored: true }));
+    return [Object.keys(variables).map(k =>
+      ({ variable: k, result: 'cycle detected', errored: true }))];
   }
 
   // Replace all calls to em.emJs with a function to invoke
@@ -204,28 +207,33 @@ export function evaluate(variables: Variable[]): Evaluation[] {
       return v;
     });
 
-  // evaluated: Object<string, string> where the keys are variable names and values are
-  // the evaluted variable expressions
-  const evaluated: Evaluated = emJsReplaced
-    .reduce((evaluated: Evaluated, v) => {
-      const varsReplaced = replaceVars(v.expression, evaluated);
+  // Run the evaluation `count` times
+  return [...Array(count).fill(undefined)].map((_) => {
+    // evaluated: Object<string, string> where the keys are variable names and values are
+    // the evaluted variable expressions
+    const evaluated: Evaluated = emJsReplaced
+      .reduce(
+        (evaluated: Evaluated, v) => {
+          const varsReplaced = replaceVars(v.expression, evaluated);
 
-      const evaled = run(varsReplaced);
+          const evaled = run(varsReplaced);
 
-      if (evaled !== null) {
-        evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
-          ? '\"' + evaled + '\"'
-          : evaled;
-      } else {
-        evaluated[v.variable] = null;
-      }
+          if (evaled !== null) {
+            evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
+              ? '\"' + evaled + '\"'
+              : evaled;
+          } else {
+            evaluated[v.variable] = null;
+          }
 
-      return evaluated;
-    },      {});
+          return evaluated;
+        },
+        {});
 
-  return Object.keys(evaluated).map(k => ({
-    variable: k,
-    result: evaluated[k],
-    errored: evaluated[k] === null,
-  }));
+    return Object.keys(evaluated).map(k => ({
+      variable: k,
+      result: evaluated[k],
+      errored: evaluated[k] === null,
+    }));
+  });
 }
