@@ -13,7 +13,7 @@ cluster(
 
     router.post('/sandbox', (req: any, res: any) => {
       console.log(req.body);
-      res.send(evaluate(req.body.vars));
+      res.send(evaluate(req.body.vars, req.body.count));
     });
 
     app.use('/', router);
