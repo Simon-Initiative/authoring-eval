@@ -57,7 +57,7 @@ export const randomArrayItem = (arr: any[]) => {
  * @param upper - The upper bound
  */
 export const randomInt = (lower: number, upper: number) => {
-  return (Math.random() * (upper - lower)) + lower;
+  return Math.floor(Math.random() * (upper - lower) + lower);
 };
 
 /**
