@@ -50,6 +50,7 @@ describe('Oli Module', () => {
     test('should return a random integer within the specified range - run 20x', () => {
       Array(0, 20).forEach(() => {
         const randomInt = Oli.randomInt(45, 47);
+        expect(Number.isInteger(randomInt)).toBe(true);
         expect(randomInt >= 45 && randomInt <= 47).toBe(true);
       });
     });
@@ -59,6 +60,7 @@ describe('Oli Module', () => {
     test('should return a random number within the specified range - run 20x', () => {
       Array(0, 20).forEach(() => {
         const random = Oli.random(45, 47);
+        expect(Number.isInteger(random)).toBe(true);
         expect(random >= 45 && random <= 47).toEqual(true);
       });
     });

@@ -5,7 +5,7 @@
  * @param difference - The numerical difference allowed to be considered "almost equal".
  * If ommited, 10 ** -7 is used.
  */
-export const almostEqual = (a: number, b: number, difference = 10 ** -7) => {
+export const almostEqual = (a: number, b: number, difference: number = 10 ** -7) => {
   return Math.abs(a - b) < difference;
 };
 
@@ -57,7 +57,7 @@ export const randomArrayItem = (arr: any[]) => {
  * @param upper - The upper bound
  */
 export const randomInt = (lower: number, upper: number) => {
-  return (Math.random() * (upper - lower)) + lower;
+  return Math.floor(Math.random() * (upper - lower) + lower);
 };
 
 /**
@@ -67,7 +67,7 @@ export const randomInt = (lower: number, upper: number) => {
  * @param upper - The upper bound
  * @param decimalPositions - Number of decimal positions. If ommited, zero is used.
  */
-export const random = (lower: number, upper: number, decimalPositions = 0) => {
+export const random = (lower: number, upper: number, decimalPositions: number = 0) => {
   if (lower === undefined) {
     return Math.random();
   }
