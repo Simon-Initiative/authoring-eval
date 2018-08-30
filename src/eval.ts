@@ -1,6 +1,6 @@
 import { VM, VMScript } from 'vm2';
 import { em } from './em';
-import { Maybe } from 'tsmonad';
+import { Maybe, Either } from 'tsmonad';
 import * as OLI from './oli';
 
 /** Available module 3rd party libraries */
@@ -193,20 +193,25 @@ function orderByDependencies(variables: Variable[]) {
  * @param {number} count
  * @return {Evaluation[][]}
  */
-export function evaluate(variables: Variable[], count: number = 1): Evaluation[][] {
+export function evaluate(variables: Variable[], count: number = 1): Evaluation[] {
 
+  /*
+    Second generation dynamic question editor
+  */
   if (variables.length === 1 && variables[0].variable === 'module') {
     // Run the evaluation `count` times
-    return [...Array(count).fill(undefined)].map((_) => {
-      return runModule(variables[0].expression);
-    });
+    return aggregateResults(
+      [...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
   }
 
+  /*
+    First generation variable editor
+  */
   const ordered = orderByDependencies(variables);
 
   if (ordered.length !== variables.length) {
-    return [Object.keys(variables).map(k =>
-      ({ variable: k, result: 'cycle detected', errored: true }))];
+    return Object.keys(variables).map(k =>
+      ({ variable: k, result: 'cycle detected', errored: true }));
   }
 
   // Replace all calls to em.emJs with a function to invoke
@@ -225,33 +230,75 @@ export function evaluate(variables: Variable[], count: number = 1): Evaluation[]
       return v;
     });
 
-  // Run the evaluation `count` times
-  return [...Array(count).fill(undefined)].map((_) => {
-    // evaluated: Object<string, string> where the keys are variable names and values are
-    // the evaluted variable expressions
-    const evaluated: Evaluated = emJsReplaced
-      .reduce(
-        (evaluated: Evaluated, v) => {
-          const varsReplaced = replaceVars(v.expression, evaluated);
+  // evaluated: Object<string, string> where the keys are variable names and values are
+  // the evaluted variable expressions
+  const evaluated: Evaluated = emJsReplaced
+    .reduce(
+      (evaluated: Evaluated, v) => {
+        const varsReplaced = replaceVars(v.expression, evaluated);
 
-          const evaled = run(varsReplaced);
+        const evaled = run(varsReplaced);
 
-          if (evaled !== null) {
-            evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
-              ? '\"' + evaled + '\"'
-              : evaled;
-          } else {
-            evaluated[v.variable] = null;
-          }
+        if (evaled !== null) {
+          evaluated[v.variable] = v.expression.startsWith('\"') && v.expression.endsWith('\"')
+            ? '\"' + evaled + '\"'
+            : evaled;
+        } else {
+          evaluated[v.variable] = null;
+        }
 
-          return evaluated;
-        },
-        {});
+        return evaluated;
+      },
+      {});
 
-    return Object.keys(evaluated).map(k => ({
-      variable: k,
-      result: evaluated[k],
-      errored: evaluated[k] === null,
-    }));
-  });
+  return Object.keys(evaluated).map(k => ({
+    variable: k,
+    result: evaluated[k],
+    errored: evaluated[k] === null,
+  }));
+}
+
+type VariableMap = { [key: string]: string };
+// aggregateResults iterates through each evaluation and looks for evaluation errors
+// and null or undefined values. It returns the first evaluation of each variable
+// unless an error value is found, in which case it replaces that value.
+function aggregateResults(results: Evaluation[][]): Evaluation[] {
+  const didFail = (evaluation: Evaluation) =>
+    evaluation.result === null ||
+    evaluation.result === undefined;
+
+  // Iterate through each evaluation, setting the variable in the map if it hasn't
+  // been set yet and overwriting the variable with an error if any evaluation fails
+  const makeEvaluationsMap = (evaluations: Evaluation[], map: VariableMap) =>
+    evaluations.reduce(
+      (acc, evaluation) =>
+        didFail(evaluation)
+          ? (acc[evaluation.variable] = 'Error - check this variable\'s code', acc)
+          : acc[evaluation.variable]
+            ? acc
+            : (acc[evaluation.variable] = evaluation.result || '', acc),
+      map);
+
+  const eitherErrorOrEvaluationsMap = (evaluations: Evaluation[]) =>
+    // If the evaluation fails, the first variable will be `errored` and the `result`
+    // will be the error message
+    (map: VariableMap) => evaluations[0].errored
+      ? Either.left(evaluations[0].result)
+      : Either.right(makeEvaluationsMap(evaluations, map));
+
+  const reduceResultsToEither = (results: Evaluation[][]) =>
+    results.reduce(
+      (either, evals) => either.bind(eitherErrorOrEvaluationsMap(evals)),
+      Either.right<string, {}>({}));
+
+  const evaluationsFromMap = (map: VariableMap) =>
+    Object.keys(map).map(key => ({ variable: key, result: map[key], errored: false }));
+
+  const listFromEither = (eitherErrorOrResults: Either<string, VariableMap>) =>
+    eitherErrorOrResults.caseOf({
+      left: (err: string) => [{ variable: 'Error', result: err, errored: true }],
+      right: map => evaluationsFromMap(map),
+    });
+
+  return listFromEither(reduceResultsToEither(results));
 }
