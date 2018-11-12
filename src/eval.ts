@@ -6,6 +6,7 @@ import * as OLI from './oli';
 /** Available module 3rd party libraries */
 const PD = require('probability-distributions');
 const ss = require('simple-statistics');
+const jStat = require('jStat').jStat;
 const math = require('mathjs');
 const algebra = require('algebra.js');
 const numeral = require('numeral');
@@ -32,6 +33,7 @@ function runModule(expression: string): Evaluation[] {
       OLI,
       PD,
       ss,
+      jStat,
       math,
       algebra,
       numeral,
