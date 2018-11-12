@@ -137,7 +137,7 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-algebra.js@^0.2.6:
+algebra.js@0.2.6:
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/algebra.js/-/algebra.js-0.2.6.tgz#23aacc86f8634e4c206d56c8077ef220a6221c74"
 
@@ -1941,6 +1941,10 @@ istanbul-reports@^1.3.0:
   dependencies:
     handlebars "^4.0.3"
 
+jStat@1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/jStat/-/jStat-1.7.1.tgz#e636dd87d72b305c060dfcc901de1732d15130c1"
+
 javascript-natural-sort@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/javascript-natural-sort/-/javascript-natural-sort-0.7.1.tgz#f9e2303d4507f6d74355a73664d1440fb5a0ef59"
@@ -2404,7 +2408,7 @@ lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
 
-lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4:
+lodash@4.17.10, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -2463,7 +2467,7 @@ math-random@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
 
-mathjs@^5.1.0:
+mathjs@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-5.1.0.tgz#e25543e0ba6ce806250d71cee8400f513924e7cd"
   dependencies:
@@ -2743,7 +2747,7 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
-numeral@^2.0.6:
+numeral@2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/numeral/-/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
 
@@ -3013,7 +3017,7 @@ private@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
 
-probability-distributions@^0.9.1:
+probability-distributions@0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/probability-distributions/-/probability-distributions-0.9.1.tgz#c689c8d62173bb281a0999e98263acc76a628e55"
   dependencies:
@@ -3418,7 +3422,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-simple-statistics@^6.1.0:
+simple-statistics@6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/simple-statistics/-/simple-statistics-6.1.0.tgz#63456076bb27bea10aefc180892d163536b6027a"
 
