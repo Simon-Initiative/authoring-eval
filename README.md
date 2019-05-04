@@ -5,9 +5,9 @@ OLI Authoring Evaluator is a sandboxed expression evaluation engine and web serv
 The expression evaluator accepts a set of variable names and their expressions in a POST request and returns the evaluations. A sample of the POST payload can be found in the data directory as sample.json.
 
 ## Related repositories
+* [authoring-dev](https://github.com/Simon-Initiative/authoring-dev) - Docker development environment for the course authoring platform
 * [authoring-client](https://github.com/Simon-Initiative/authoring-client) - Typescript/React/Redux editing client
 * [authoring-server](https://github.com/Simon-Initiative/authoring-server) - Java server, REST API, bridge to OLI
-* [authoring-dev](https://github.com/Simon-Initiative/authoring-dev) - Docker development environment for the course authoring platform
 * [authoring-admin](https://github.com/Simon-Initiative/authoring-admin) - Elm admin client
 
 ## License
