@@ -6,6 +6,13 @@ OLI Authoring Evaluator is a sandboxed expression evaluation engine and web serv
 
 The expression evaluator accepts a set of variable names and their expressions in a POST request and returns the evaluations. A sample of the POST payload can be found in the data directory as sample.json.
 
+## Dynamic Questions
+Dynamic questions can be created within question pools using the [Course Author](https://echo.oli.cmu.edu).
+
+![Dynamic Question Editor](https://docs.oli.cmu.edu/dynamic-questions/img/variable_editor_example.png)
+
+For more information on how to create dynamic questions, see [OLI Dynamic Questions](https://docs.oli.cmu.edu/dynamic-questions/).
+
 ## Related repositories
 * [authoring-dev](https://github.com/Simon-Initiative/authoring-dev) - Docker development environment for the course authoring platform
 * [authoring-client](https://github.com/Simon-Initiative/authoring-client) - Typescript/React/Redux editing client
