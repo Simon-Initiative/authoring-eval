@@ -276,9 +276,9 @@ function aggregateResults(results: Evaluation[][]): Evaluation[] {
       (acc, evaluation) =>
         didFail(evaluation)
           ? (acc[evaluation.variable] = 'Error - check this variable\'s code', acc)
-          : acc[evaluation.variable]
+          : acc.hasOwnProperty(evaluation.variable)
             ? acc
-            : (acc[evaluation.variable] = evaluation.result || '', acc),
+            : (acc[evaluation.variable] = evaluation.result as string, acc),
       map);
 
   const eitherErrorOrEvaluationsMap = (evaluations: Evaluation[]) =>
