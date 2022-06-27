@@ -200,10 +200,13 @@ export function evaluate(variables: Variable[], count: number = 1): Evaluation[]
   /*
     Second generation dynamic question editor
   */
-  if (variables.length === 1 && variables[0].variable === 'module') {
-    // Run the evaluation `count` times
-    return aggregateResults(
-      [...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
+
+  if (variables.every(v => v.variable === 'module')) {
+
+    const result = variables.map(v => {
+      return aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(v.expression)));
+    });
+    return (result as any) as Evaluation[];
   }
 
   /*
@@ -302,5 +305,5 @@ function aggregateResults(results: Evaluation[][]): Evaluation[] {
       right: map => evaluationsFromMap(map),
     });
 
-  return listFromEither(reduceResultsToEither(results));
+  return listFromEither(reduceResultsToEither(results) as any);
 }

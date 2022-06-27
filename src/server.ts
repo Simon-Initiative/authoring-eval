@@ -12,7 +12,6 @@ cluster(
     app.use(bodyParser.urlencoded({ extended: true }));
 
     router.post('/sandbox', (req: any, res: any) => {
-      console.log(req.body);
       res.send(evaluate(req.body.vars, req.body.count));
     });
 
