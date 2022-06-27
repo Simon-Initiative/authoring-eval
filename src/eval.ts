@@ -189,6 +189,10 @@ function orderByDependencies(variables: Variable[]) {
   return order;
 }
 
+export function evaluateBatch(batch: Variable[], count = 1): Evaluation[] {
+  return batch.map((v: Variable) => evaluate([v], count)[0]);
+}
+
 /**
  * Evaluate a list of expressions, returning a list of Evaluations of size count
  * @param {Variable[]} variables
@@ -302,5 +306,5 @@ function aggregateResults(results: Evaluation[][]): Evaluation[] {
       right: map => evaluationsFromMap(map),
     });
 
-  return listFromEither(reduceResultsToEither(results));
+  return listFromEither(reduceResultsToEither(results) as any);
 }

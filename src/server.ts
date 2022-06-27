@@ -1,7 +1,7 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as cluster from 'express-cluster';
-import { evaluate } from './eval';
+import { evaluate, evaluateBatch } from './eval';
 
 cluster(
   (worker: any) => {
@@ -12,8 +12,11 @@ cluster(
     app.use(bodyParser.urlencoded({ extended: true }));
 
     router.post('/sandbox', (req: any, res: any) => {
-      console.log(req.body);
       res.send(evaluate(req.body.vars, req.body.count));
+    });
+
+    router.post('/batch', (req: any, res: any) => {
+      res.send(evaluateBatch(req.body.vars, req.body.count));
     });
 
     app.use('/', router);
