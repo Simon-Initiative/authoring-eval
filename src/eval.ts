@@ -204,7 +204,7 @@ export function evaluate(variables: Variable[], count: number = 1): Evaluation[]
   if (variables.every(v => v.variable === 'module')) {
 
     const result = variables.map(v => {
-      aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
+      return aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(v.expression)));
     });
     return (result as any) as Evaluation[];
   }

@@ -1,7 +1,7 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as cluster from 'express-cluster';
-import { evaluate, evaluateBatch } from './eval';
+import { evaluate } from './eval';
 
 cluster(
   (worker: any) => {
