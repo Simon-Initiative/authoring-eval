@@ -15,10 +15,6 @@ cluster(
       res.send(evaluate(req.body.vars, req.body.count));
     });
 
-    router.post('/batch', (req: any, res: any) => {
-      res.send(evaluateBatch(req.body.vars, req.body.count));
-    });
-
     app.use('/', router);
 
     return app.listen(8000, '0.0.0.0', () => {

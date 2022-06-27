@@ -189,10 +189,6 @@ function orderByDependencies(variables: Variable[]) {
   return order;
 }
 
-export function evaluateBatch(batch: Variable[], count = 1): Evaluation[] {
-  return batch.map((v: Variable) => evaluate([v], count)[0]);
-}
-
 /**
  * Evaluate a list of expressions, returning a list of Evaluations of size count
  * @param {Variable[]} variables
@@ -204,10 +200,13 @@ export function evaluate(variables: Variable[], count: number = 1): Evaluation[]
   /*
     Second generation dynamic question editor
   */
-  if (variables.length === 1 && variables[0].variable === 'module') {
-    // Run the evaluation `count` times
-    return aggregateResults(
-      [...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
+
+  if (variables.every(v => v.variable === 'module')) {
+
+    const result = variables.map(v => {
+      aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
+    });
+    return (result as any) as Evaluation[];
   }
 
   /*
