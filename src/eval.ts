@@ -189,25 +189,7 @@ function orderByDependencies(variables: Variable[]) {
   return order;
 }
 
-/**
- * Evaluate a list of expressions, returning a list of Evaluations of size count
- * @param {Variable[]} variables
- * @param {number} count
- * @return {Evaluation[][]}
- */
-export function evaluate(variables: Variable[], count: number = 1): Evaluation[] {
-
-  /*
-    Second generation dynamic question editor
-  */
-
-  if (variables.every(v => v.variable === 'module')) {
-
-    const result = variables.map(v => {
-      return aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(v.expression)));
-    });
-    return (result as any) as Evaluation[];
-  }
+function runFirstGen(variables: Variable[]) {
 
   /*
     First generation variable editor
@@ -261,6 +243,33 @@ export function evaluate(variables: Variable[], count: number = 1): Evaluation[]
     result: evaluated[k],
     errored: evaluated[k] === null,
   }));
+}
+
+/**
+ * Evaluate a list of expressions, returning a list of Evaluations of size count
+ * @param {Variable[]} variables
+ * @param {number} count
+ * @return {Evaluation[][]}
+ */
+export function evaluate(variables: Variable[], count: number = 1): Evaluation[] {
+
+  // This is a batch request.
+  if (variables.every(v => v instanceof Array)) {
+    const result = variables.map(v => {
+      return runOne(v as any, count);
+    });
+    return (result as any) as Evaluation[];
+  } else {
+    return runOne(variables, count);
+  }
+
+}
+
+function runOne(variables: Variable[], count: number = 1): Evaluation[] {
+  if (variables.length === 1 && variables[0].variable === 'module') {
+    return aggregateResults([...Array(count).fill(undefined)].map(_ => runModule(variables[0].expression)));
+  }
+  return runFirstGen(variables);
 }
 
 type VariableMap = { [key: string]: string };
