@@ -21,7 +21,7 @@
     "express-cluster": "0.0.5",
     "jStat": "1.7.1",
     "lodash": ">=4.17.11",
-    "mathjs": "5.1.0",
+    "mathjs": "7.5.1",
     "nodemon": "^1.18.3",
     "numeral": "2.0.6",
     "probability-distributions": "0.9.1",
