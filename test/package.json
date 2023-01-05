@@ -12,6 +12,6 @@
   "dependencies": {
     "artillery": "^1.6.0-22",
     "request": "^2.87.0",
-    "jest": "23.4.1"
+    "jest": "29.3.1"
   }
 }
