@@ -1,0 +1,38 @@
+version: '3.1'
+services:
+  eval-engine:
+    build: ./
+    image: torus/eval_engine
+    restart: always
+    container_name: eval_engine
+    networks:
+    - service-tier
+    logging:
+      driver: syslog
+      options:
+        syslog-address: udp://localhost:514
+        syslog-facility: local1
+        tag: "oli.eval_engine"
+  ha-proxy:
+    build: ./ha-proxy
+    image: torus/haproxy
+    restart: always
+    container_name: torus-haproxy
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - /etc/pki/tls/certs/haproxy:/certs
+    networks:
+    - service-tier
+    depends_on:
+    - eval-engine
+    logging:
+      driver: syslog
+      options:
+        syslog-address: udp://localhost:514
+        syslog-facility: local1
+        tag: "torus.torus-haproxy"
+networks:
+  service-tier:
+    driver: bridge
