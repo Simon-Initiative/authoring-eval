@@ -12,12 +12,12 @@ services:
       options:
         syslog-address: udp://localhost:514
         syslog-facility: local1
-        tag: "oli.eval_engine"
+        tag: "eval-engine"
   ha-proxy:
     build: ./ha-proxy
-    image: torus/haproxy
+    image: eval/haproxy
     restart: always
-    container_name: torus-haproxy
+    container_name: eval-haproxy
     ports:
     - "80:80"
     - "443:443"
@@ -32,7 +32,7 @@ services:
       options:
         syslog-address: udp://localhost:514
         syslog-facility: local1
-        tag: "torus.torus-haproxy"
+        tag: "eval-haproxy"
 networks:
   service-tier:
     driver: bridge
