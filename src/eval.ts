@@ -96,7 +96,14 @@ function replaceVars(expression: string, evaluated: Evaluated) {
   let newExpression = expression;
 
   Object.keys(evaluated).forEach((variable) => {
-    const value = evaluated[variable];
+    let value = evaluated[variable];
+
+    if (
+      typeof value === "string" &&
+      !(value.startsWith('"') || value.startsWith('"'))
+    ) {
+      value = `'${value}'`;
+    }
 
     // Handle double @ and single @
     newExpression = newExpression
