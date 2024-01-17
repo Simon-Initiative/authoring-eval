@@ -13,6 +13,11 @@ Dynamic questions can be created within question pools using the [Course Author]
 
 For more information on how to create dynamic questions, see [OLI Dynamic Questions](https://docs.oli.cmu.edu/dynamic-questions/).
 
+## Running locally
+Command to build and run the Evaluation server on local port 8000:
+
+`docker build -t eval-engine . && docker run -p 8000:8000 eval-engine`
+
 ## Related repositories
 * [authoring-dev](https://github.com/Simon-Initiative/authoring-dev) - Docker development environment for the course authoring platform
 * [authoring-client](https://github.com/Simon-Initiative/authoring-client) - Typescript/React/Redux editing client
