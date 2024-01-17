@@ -212,8 +212,11 @@ function runFirstGen(variables: Variable[]) {
   // emJsReplaced: Variable[]
   const emJsReplaced = ordered
     .map((v) => {
-      if (v.expression.startsWith('em.emJs(')) {
-        let body = v.expression.substr(8);
+
+      const bodyExpression = v.expression.trim();
+
+      if (bodyExpression.startsWith('em.emJs(')) {
+        let body = bodyExpression.substr(8);
         body = body.substr(0, body.length - 1);
 
         return {
