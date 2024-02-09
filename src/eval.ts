@@ -12,6 +12,24 @@ const algebra = require('algebra.js');
 const numeral = require('numeral');
 const _ = require('lodash');
 
+export function convertStringToNumber(value: any) {
+  // Check if the value is of type string
+  if (typeof value === 'string') {
+    // Attempt to convert the string to a number
+    const parsedNumber = Number(value);
+
+    // Check if the conversion is successful and not NaN
+    if (!isNaN(parsedNumber)) {
+      // Return the number, preserving its type (integer or float)
+      return parsedNumber;
+    }
+  }
+
+  // If the value is not a string or cannot be converted to a number,
+  // return the original value or handle it as needed
+  return value;
+}
+
 function run(expression: string) {
   const vm = new VM({
     timeout: 300,
@@ -19,7 +37,8 @@ function run(expression: string) {
   });
 
   try {
-    return vm.run(expression);
+    const result = vm.run(expression);
+    return convertStringToNumber(result);
   } catch (e) {
     return null;
   }
