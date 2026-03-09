@@ -15,6 +15,10 @@ cluster(
       res.send(evaluate(req.body.vars, req.body.count));
     });
 
+    router.get('/health', (req: any, res: any) => {
+      res.sendStatus(200);
+    });
+
     app.use('/', router);
 
     return app.listen(8000, '0.0.0.0', () => {
